@@ -8,6 +8,7 @@ module.exports ={
     extend: {},
   },
   plugins: [
-    require('tailwind-dracula')()
+    require('tailwind-dracula')(),
+      require('tailwind-scrollbar')()
   ],
 }
