@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const app = express();
 const chatRouter = require('./routes/chatRouter');
 const authRouter = require('./routes/authRouter');
+const userRouter = require('./routes/userRouter');
 
 // Middelware
 if (process.env.NODE_ENV === 'development') {
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 // chatapp routes
 app.use('/api/chats', chatRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
 
 
 

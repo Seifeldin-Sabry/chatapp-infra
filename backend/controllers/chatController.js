@@ -1,11 +1,11 @@
 const sql = require("../utils/db.js");
 
 exports.getMessages = async (req, res, next) => {
-    const { chatId } = req.params
+    const { id } = req.params
 
     const messages = await sql`
-        select * from chat
-        where ID = ${chatId}`
+        select * from message
+        where chat_id = ${id}`
 
     res.status(200).json({
         status: "success",
@@ -16,7 +16,7 @@ exports.getMessages = async (req, res, next) => {
 }
 
 exports.createChat = async (req, res, next) => {
-    const { user1, user2 } = req.params
+    const { user1, user2 } = req.body
     const chat = await sql `
         insert into chat (user1, user2)
         VALUES 
