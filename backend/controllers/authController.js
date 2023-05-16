@@ -32,7 +32,7 @@ exports.signUp = async (req, res, next) => {
 }
 
 exports.login = async (req, res, next) => {
-  const { email, password } = req.body
+  const { name, password } = req.body
 
   //steps to login
   let userExists = await sql`
