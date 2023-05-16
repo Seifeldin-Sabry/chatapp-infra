@@ -22,11 +22,12 @@ function create_vm() {
       --image-family="$IMAGE_FAMILY" \
       --image-project="$IMAGE_PROJECT" \
       --metadata=startup-script="#!/bin/bash
-                                apt-get update
-                                apt-get install -y nginx
-                                curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-                                apt-get install -y nodejs
-                                service nginx start"
+      apt-get update
+      curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+      apt-get install -y nodejs
+      apt-get install -y npm
+      apt-get install -y postgresql postgresql-contrib
+      "
 }
 
 function authorize_vm_to_instance() {
@@ -63,5 +64,10 @@ function create_sql_instance() {
 
 function setup_database() {
   echo "Setting up database"
-
+  gcloud sql databases create chatapp \
+    --instance="$SQL_INSTANCE_NAME"
+  gcloud sql users create chatapp \
+    --instance="$SQL_INSTANCE_NAME" \
+    --password="$SQL_ROOT_PASSWORD"
+  gcloud ssh "$VM_NAME" --zone="$ZONE" --command="
 }
