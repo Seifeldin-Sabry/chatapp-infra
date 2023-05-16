@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
+const chatRouter = require('./routes/chatRouter');
+const authRouter = require('./routes/authRouter');
 
 // Middelware
 if (process.env.NODE_ENV === 'development') {
@@ -16,14 +18,9 @@ app.use((req, res, next) => {
 //middleware for specified endpoints
 // chatapp routes
 app.use('/api/chats', chatRouter);
-app.use('/api/chats/:id/messages', messageRouter);
-app.use('/api/login', loginRouter);
-app.use('/api/signup', signupRouter);
+app.use('/api/auth', authRouter);
 
-app.all('*',(req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
-})
 
-app.use(globalErrorHandler)
+
 
 module.exports = app;
