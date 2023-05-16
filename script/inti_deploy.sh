@@ -11,11 +11,6 @@ SQL_INSTANCE_NAME="chatapp"
 DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
 
-if ! pwd | grep scripts 1>/dev/null 2>/dev/null; then
-  echo "Please run this script from the chatapp/client directory"
-  exit 1
-fi
-
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
     echo "VM ${VM_NAME} already exists"
