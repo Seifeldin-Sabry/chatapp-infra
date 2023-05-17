@@ -1,13 +1,24 @@
-<script setup>
+<script>
 
-defineProps({
-    name: String
-})
+export default {
+    props: ['name'],
+    data() {
+        return {
+            messages: null,
+            text: ''
+        }
+    },
+    async created() {
+        // console.log("created contact comp with name:")
+        // console.log(this.name)
+    }
+}
+
 </script>
 
 
 <template>
-    <div class="text-orange-500 h-16 hover:bg-gray-700 border-orange-600 rounded-8 flex justify-between items-center">
+    <div @click="$emit('selectChat',name)" class="text-orange-500 h-16 hover:bg-gray-700 border-orange-600 rounded-8 flex justify-between items-center">
         <svg fill="#F38107" version="1.1" class="pl-2 w-8 h-8" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
              viewBox="0 0 337.559 337.559" xml:space="preserve">
 			<path d="M337.559,67.704v-28.33c0-17.506-14.242-31.748-31.748-31.748h-54.572c-4.932-3.021-10.727-4.765-16.922-4.765H32.5
