@@ -5,6 +5,7 @@ import Chat from "./components/Chat.vue";
 import {faker, th} from '@faker-js/faker';
 import {defineComponent} from "vue";
 import LoginForm from "./components/LoginForm.vue";
+import SearchContact from "./components/SearchContact.vue";
 
 export default defineComponent({
     computed: {
@@ -12,11 +13,12 @@ export default defineComponent({
             return th
         }
     },
-    components: {LoginForm, Chat, Contacts},
+    components: {SearchContact, LoginForm, Chat, Contacts},
     data () {
         return {
             chatId: 0,
-            userId: undefined
+            userId: undefined,
+            filteredContacts: []
         }
     },
     methods:{
@@ -43,6 +45,9 @@ export default defineComponent({
             document.getElementById("login-form-container").hidden=true;
             document.getElementById("contacts").hidden=false;
             document.getElementById("chat").hidden=false;
+        },
+        filterContacts(){
+          console.log("filtering")
         }
     }
 })
@@ -56,6 +61,7 @@ export default defineComponent({
             <LoginForm @login="login" @register="register"></LoginForm>
         </div>
         <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
+            <SearchContact @filter="filterContacts"></SearchContact>
             <Contacts @select-chat="selectChat" :key="userId" :userId="userId"></Contacts>
         </div>
         <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
