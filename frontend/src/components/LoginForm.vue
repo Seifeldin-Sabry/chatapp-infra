@@ -4,15 +4,17 @@ export default {
     data() {
         return {
             username: '',
-            password: ''
+            password: '',
+            loginRegister: ''
         }
     },
     methods: {
         login(submitEvent) {
             const formData = new FormData(submitEvent.target);
             const data = Object.fromEntries(formData);
+            console.log(data);
             // console.log(data);
-            fetch('http://localhost:3002/api/auth/login', {
+            fetch(`http://localhost:3002/api/auth/${this.loginRegister}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -44,7 +46,7 @@ export default {
                     <div class="lg:text-left text-center">
                         <div class="flex items-center justify-center ">
                             <div class="bg-black border-2 border-orange-600 flex flex-col w-80 border border-gray-900 rounded-lg px-8 py-10">
-                                <form class="flex flex-col space-y-8 mt-10"  @submit.prevent="login">
+                                <form class="flex flex-col space-y-8 mt-10" @reset.prevent="register"  @submit.prevent="login">
                                     <label class="font-bold text-lg text-white " for="name">Username</label>
                                     <input class="border-2 rounded-lg py-3 px-3 bg-black focus:outline-none focus:border-orange-600 text-orange-600"
                                            id="name"
@@ -57,7 +59,11 @@ export default {
                                            required type="password">
                                     <button
                                             class="border-2 hover:border-orange-600 hover:text-orange-600 border-slate-300 bg-black text-slate-300 rounded-lg py-3 font-semibold"
-                                            type="submit">Log in
+                                            type="submit" @click="loginRegister='login'" id="login">Log in
+                                    </button>
+                                    <button
+                                        class="border-2 hover:border-orange-600 hover:text-orange-600 border-slate-300 bg-black text-slate-300 rounded-lg py-3 font-semibold"
+                                        type="submit" @click="loginRegister='signup'" id="signup">Register
                                     </button>
                                 </form>
                             </div>
