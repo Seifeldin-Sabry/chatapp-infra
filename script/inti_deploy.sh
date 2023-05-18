@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VM_NAME="instance-$(date +%s)"
+VM_NAME="instance-chatapp"
 REGION="europe-west1"
 ZONE="europe-west1-b"
 MACHINE_TYPE="e2-small"
@@ -10,6 +10,15 @@ TARGET_TAGS="http-server,ssl-rule-tag,ssh,https-server,default-allow-ssh"
 SQL_INSTANCE_NAME="chatapp"
 DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
+DOMAIN_NAME="globalchat.tech"
+EMAIL="seifeldin.sabry@student.kdg.be"
+SYSTEMD_BACKEND_SERVICE_NAME="chatapp.backend.service"
+SYSTEMD_BACKEND_SERVICE_PATH="/etc/systemd/system/${SYSTEMD_BACKEND_SERVICE_NAME}"
+SYSTEMD_BACKEND_SERVICE_CONTENT=$(cat ./script/systemd_backend.txt)
+SYSTEMD_FRONTEND_SERVICE_NAME="chatapp.frontend.service"
+SYSTEMD_FRONTEND_SERVICE_PATH="/etc/systemd/system/${SYSTEMD_FRONTEND_SERVICE_NAME}"
+SYSTEMD_FRONTEND_SERVICE_CONTENT=$(cat ./script/systemd_frontend.txt)
+NGINX_CONFIG=$(cat ./script/nginx_config.txt)
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
@@ -24,10 +33,27 @@ function create_vm() {
       --metadata=startup-script="#!/bin/bash
       apt-get update
       curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-      apt-get install -y nodejs
-      apt-get install -y npm
-      apt-get install -y postgresql postgresql-contrib
+      apt-get install -y nodejs npm git postgresql postgresql-contrib nginx certbot python3-certbot-nginx
       service postgresql start
+      ufw allow 'Nginx Full'
+      ufw allow 'OpenSSH'
+      ufw allow 'Nginx HTTP'
+      ufw allow 'Nginx HTTPS'
+      ufw allow 80
+      ufw allow 443
+      echo $SYSTEMD_BACKEND_SERVICE_CONTENT > $SYSTEMD_BACKEND_SERVICE_PATH
+      echo $SYSTEMD_FRONTEND_SERVICE_CONTENT > $SYSTEMD_FRONTEND_SERVICE_PATH
+      systemctl daemon-reload
+      systemctl start $SYSTEMD_BACKEND_SERVICE_NAME
+      systemctl start $SYSTEMD_FRONTEND_SERVICE_NAME
+      systemctl start nginx
+      systemctl enable nginx
+      echo $NGINX_CONFIG > /etc/nginx/sites-available/$DOMAIN_NAME
+      ln -s /etc/nginx/sites-available/$DOMAIN_NAME /etc/nginx/sites-enabled/
+      systemctl restart nginx
+      git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /home/ubuntu/chatapp-infra
+      while ! which certbot > /dev/null; do sleep 1; done
+      certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
       "
 }
 
@@ -80,10 +106,10 @@ function setup_database() {
     --instance="$SQL_INSTANCE_NAME" \
     --quiet 1>/dev/null 2>/dev/null; then
     echo "Database ${DATABASE_NAME} already exists"
-    return
-  fi
-  gcloud sql databases create $DATABASE_NAME \
+  else
+    gcloud sql databases create $DATABASE_NAME \
     --instance="$SQL_INSTANCE_NAME"
+  fi
   wait_for_psql
   gcloud compute scp ./sql/schema.sql "$VM_NAME":~/schema.sql --zone=$ZONE --project=infra3-seifeldin-sabry
   gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="echo $SQL_ROOT_PASSWORD | psql -h $SQL_INSTANCE_IP -U postgres -d $DATABASE_NAME -f ~/schema.sql"
