@@ -45,9 +45,10 @@ function create_vm() {
       ufw allow 'Nginx HTTPS'
       ufw allow 80
       ufw allow 443
+      ufw allow 22
       ufw enable
-      echo $SYSTEMD_BACKEND_SERVICE_CONTENT > $SYSTEMD_BACKEND_SERVICE_PATH
-      echo $SYSTEMD_FRONTEND_SERVICE_CONTENT > $SYSTEMD_FRONTEND_SERVICE_PATH
+      echo \"$SYSTEMD_BACKEND_SERVICE_CONTENT\" > \"$SYSTEMD_BACKEND_SERVICE_PATH\"
+      echo \"$SYSTEMD_FRONTEND_SERVICE_CONTENT\" > \"$SYSTEMD_FRONTEND_SERVICE_PATH\"
       systemctl daemon-reload
       systemctl start $SYSTEMD_BACKEND_SERVICE_NAME
       systemctl start $SYSTEMD_FRONTEND_SERVICE_NAME
