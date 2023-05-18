@@ -41,7 +41,7 @@ function create_vm() {
       systemctl daemon-reload
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
       while ! which certbot > /dev/null; do sleep 1; done
-      certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
+      # certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
       "
 }
 
