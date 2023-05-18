@@ -1,6 +1,6 @@
 server {
     listen      80;
-    server_name globalchat.tech www.globalchat.tech;
+    server_name bottomchat.duckdns.org www.bottomchat.duckdns.org;
     charset utf-8;
     root    e/chatapp-infra/frontend/dist;
     index   index.html;
