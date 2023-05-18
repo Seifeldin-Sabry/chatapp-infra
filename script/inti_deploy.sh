@@ -10,9 +10,8 @@ TARGET_TAGS="http-server,ssl-rule-tag,ssh,https-server,default-allow-ssh"
 SQL_INSTANCE_NAME="chatapp"
 DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
-DOMAIN_NAME="bottomchat.duckdns.org"
+DOMAIN_NAME="mocanupaulc.com"
 EMAIL="seifeldin.sabry@student.kdg.be"
-NGINX_CONFIG="$(cat ./script/nginx_config)"
 SYSTEMD_BACKEND_SERVICE_PATH="/etc/systemd/system/backend.service"
 SYSTEMD_FRONTEND_SERVICE_PATH="/etc/systemd/system/frontend.service"
 
@@ -30,27 +29,22 @@ function create_vm() {
       apt-get update
       curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
       apt-get install -y nodejs vite
-      apt-get install -y nginx
       apt-get install -y postgresql postgresql-contrib
       apt-get install -y git
       apt-get install -y certbot python3-certbot-nginx
       service postgresql start
-      ufw allow 'Nginx Full'
-      ufw allow 'OpenSSH'
-      ufw allow 'Nginx HTTP'
-      ufw allow 'Nginx HTTPS'
       ufw allow 80
       ufw allow 443
       ufw allow 22
       ufw enable
-      systemctl start nginx
-      systemctl enable nginx
-      echo \"$NGINX_CONFIG\" > /etc/nginx/sites-available/$DOMAIN_NAME
-      ln -s /etc/nginx/sites-available/$DOMAIN_NAME /etc/nginx/sites-enabled/
-      systemctl restart nginx
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
       while ! which certbot > /dev/null; do sleep 1; done
-      certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
+      # certbot certonly --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
+      cd /chatapp-infra
+      cd backend
+      npm install && npm run start
+      cd ../frontend
+      npm install && npm run build && npm run preview
       "
 }
 
