@@ -33,7 +33,11 @@ function create_vm() {
       --metadata=startup-script="#!/bin/bash
       apt-get update
       curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-      apt-get install -y nodejs npm git postgresql postgresql-contrib nginx certbot python3-certbot-nginx
+      apt-get install -y nodejs npm
+      apt-get install -y nginx
+      apt-get install -y postgresql postgresql-contrib
+      apt-get install -y git
+      apt-get install -y certbot python3-certbot-nginx
       service postgresql start
       ufw allow 'Nginx Full'
       ufw allow 'OpenSSH'
@@ -51,7 +55,7 @@ function create_vm() {
       echo $NGINX_CONFIG > /etc/nginx/sites-available/$DOMAIN_NAME
       ln -s /etc/nginx/sites-available/$DOMAIN_NAME /etc/nginx/sites-enabled/
       systemctl restart nginx
-      git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /home/ubuntu/chatapp-infra
+      git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git ~/chatapp-infra
       while ! which certbot > /dev/null; do sleep 1; done
       certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
       "
