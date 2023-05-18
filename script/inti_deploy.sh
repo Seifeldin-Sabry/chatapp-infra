@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VM_NAME="instance-chatapp"
+VM_NAME="chatapp-vm"
 REGION="europe-west1"
 ZONE="europe-west1-b"
 MACHINE_TYPE="e2-small"
@@ -10,10 +10,10 @@ TARGET_TAGS="http-server,ssl-rule-tag,ssh,https-server,default-allow-ssh"
 SQL_INSTANCE_NAME="chatapp"
 DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
-DOMAIN_NAME="mocanupaulc.com"
+DOMAIN_NAME="bottomchat.duckdns.org"
 EMAIL="seifeldin.sabry@student.kdg.be"
-SYSTEMD_BACKEND_SERVICE_PATH="/etc/systemd/system/backend.service"
-SYSTEMD_FRONTEND_SERVICE_PATH="/etc/systemd/system/frontend.service"
+NGINX_CONFIG="$(cat ./script/nginx_config)"
+NGINX_CONFIG_PATH="/etc/nginx/sites-available/default"
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
@@ -31,20 +31,20 @@ function create_vm() {
       apt-get install -y nodejs vite
       apt-get install -y postgresql postgresql-contrib
       apt-get install -y git
-      apt-get install -y certbot python3-certbot-nginx
+      apt-get install -y certbot python3-certbot-nginx nginx
       service postgresql start
       ufw allow 80
       ufw allow 443
       ufw allow 22
+      ufw allow 'Nginx Full'
+      ufw allow 'OpenSSH'
+      echo $NGINX_CONFIG > $NGINX_CONFIG_PATH
       ufw enable
+      systemctl restart nginx
+      systemctl daemon-reload
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
       while ! which certbot > /dev/null; do sleep 1; done
-      # certbot certonly --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
-      cd /chatapp-infra
-      cd backend
-      npm install && npm run start
-      cd ../frontend
-      npm install && npm run build && npm run preview
+      certbot certonly --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
       "
 }
 
@@ -100,10 +100,10 @@ function setup_database() {
   else
     gcloud sql databases create $DATABASE_NAME \
     --instance="$SQL_INSTANCE_NAME"
+    wait_for_psql
+    gcloud compute scp ./sql/schema.sql "$VM_NAME":~/schema.sql --zone=$ZONE --project=infra3-seifeldin-sabry
+    gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="echo $SQL_ROOT_PASSWORD | psql -h $SQL_INSTANCE_IP -U postgres -d $DATABASE_NAME -f ~/schema.sql"
   fi
-  wait_for_psql
-  gcloud compute scp ./sql/schema.sql "$VM_NAME":~/schema.sql --zone=$ZONE --project=infra3-seifeldin-sabry
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="echo $SQL_ROOT_PASSWORD | psql -h $SQL_INSTANCE_IP -U postgres -d $DATABASE_NAME -f ~/schema.sql"
 }
 
 function wait_for_psql() {
