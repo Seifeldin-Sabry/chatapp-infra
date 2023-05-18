@@ -28,8 +28,8 @@ function create_vm() {
       --image-project="$IMAGE_PROJECT" \
       --metadata=startup-script="#!/bin/bash
       apt-get update
-      curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-      apt-get install -y nodejs npm vite
+      curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+      apt-get install -y nodejs vite
       apt-get install -y nginx
       apt-get install -y postgresql postgresql-contrib
       apt-get install -y git
@@ -125,11 +125,11 @@ function start_app() {
   echo "Starting app"
   gcloud compute scp ./script/systemd_backend.service "$VM_NAME":~/backend.service --zone=$ZONE --project=infra3-seifeldin-sabry
   gcloud compute scp ./script/systemd_frontend.service "$VM_NAME":~/frontend.service --zone=$ZONE --project=infra3-seifeldin-sabry
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="≈mv ~/backend.service /etc/systemd/system/backend.service"
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="≈mv ~/frontend.service /etc/systemd/system/frontend.service"
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="≈systemctl daemon-reload"
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="≈systemctl start backend.service"
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="≈systemctl start frontend.service"
+  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo mv ~/backend.service /etc/systemd/system/backend.service"
+  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo mv ~/frontend.service /etc/systemd/system/frontend.service"
+  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl daemon-reload"
+  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl start backend.service"
+  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl start frontend.service"
 }
 
 
