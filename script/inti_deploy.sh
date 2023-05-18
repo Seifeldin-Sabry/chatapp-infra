@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VM_NAME="instance-chatapp1"
+VM_NAME="instance-chatapp"
 REGION="europe-west1"
 ZONE="europe-west1-b"
 MACHINE_TYPE="e2-small"
@@ -128,8 +128,10 @@ function start_app() {
   gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo mv ~/backend.service /etc/systemd/system/backend.service"
   gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo mv ~/frontend.service /etc/systemd/system/frontend.service"
   gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl daemon-reload"
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl start backend.service"
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl start frontend.service"
+  while ! gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl start backend.service && sudo systemctl start frontend.service"; do
+    echo "app not yet ready"
+    sleep 1
+  done
 }
 
 

@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/chatapp-infra/frontend
-ExecStart=npm install && npm run build && vite --port 80 && vite preview
+ExecStart=npm install && npm run build && npm run preview
 
 Restart=on-failure
 
