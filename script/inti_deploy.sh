@@ -35,13 +35,17 @@ function create_vm() {
       ufw allow 22
       ufw allow 'Nginx Full'
       ufw allow 'OpenSSH'
-      echo $NGINX_CONFIG > $NGINX_CONFIG_PATH
       ufw enable
+      echo \"$NGINX_CONFIG\" > $NGINX_CONFIG_PATH
       systemctl restart nginx
-      systemctl daemon-reload
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
       while ! which certbot > /dev/null; do sleep 1; done
       # certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
+      echo \"$(cat ./script/systemd_backend.service)\" > /etc/systemd/system/chatapp-backend.service
+      echo \"$(cat ./script/systemd_frontend.service)\" > /etc/systemd/system/chatapp-frontend.service
+      systemctl daemon-reload
+      systemctl enable chatapp-backend.service
+      systemctl enable chatapp-frontend.service
       "
 }
 
@@ -112,19 +116,6 @@ function wait_for_psql() {
   echo "psql ready"
 }
 
-function start_app() {
-  echo "Starting app"
-  gcloud compute scp ./script/systemd_backend.service "$VM_NAME":~/backend.service --zone=$ZONE --project=infra3-seifeldin-sabry
-  gcloud compute scp ./script/systemd_frontend.service "$VM_NAME":~/frontend.service --zone=$ZONE --project=infra3-seifeldin-sabry
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo mv ~/backend.service /etc/systemd/system/backend.service"
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo mv ~/frontend.service /etc/systemd/system/frontend.service"
-  gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl daemon-reload"
-  while ! gcloud compute ssh "$VM_NAME" --project=infra3-seifeldin-sabry --command="sudo systemctl start backend.service && sudo systemctl start frontend.service"; do
-    echo "app not yet ready"
-    sleep 1
-  done
-}
-
 
 # Function to configure GCloud Storage for static files with open access
 #function configure_gcloud_storage() {
@@ -144,4 +135,3 @@ get_instance_ip
 create_sql_instance
 authorize_vm_to_instance
 setup_database
-start_app
