@@ -10,7 +10,7 @@ TARGET_TAGS="http-server,ssl-rule-tag,ssh,https-server,default-allow-ssh"
 SQL_INSTANCE_NAME="chatapp"
 DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
-DOMAIN_NAME="bottomchat.duckdns.org"
+DOMAIN_NAME="globalchat.tech"
 EMAIL="seifeldin.sabry@student.kdg.be"
 NGINX_CONFIG="$(cat ./script/nginx_config)"
 NGINX_CONFIG_PATH="/etc/nginx/sites-available/default"
@@ -28,10 +28,7 @@ function create_vm() {
       --metadata=startup-script="#!/bin/bash
       apt-get update
       curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
-      apt-get install -y nodejs vite
-      apt-get install -y postgresql postgresql-contrib
-      apt-get install -y git
-      apt-get install -y certbot python3-certbot-nginx nginx
+      apt-get install -y nodejs vite postgresql postgresql-contrib git certbot python3-certbot-nginx nginx
       service postgresql start
       ufw allow 80
       ufw allow 443
@@ -44,7 +41,7 @@ function create_vm() {
       systemctl daemon-reload
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
       while ! which certbot > /dev/null; do sleep 1; done
-      certbot certonly --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
+      certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
       "
 }
 
