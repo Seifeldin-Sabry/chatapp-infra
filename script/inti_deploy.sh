@@ -12,13 +12,13 @@ DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
 DOMAIN_NAME="globalchat.tech"
 EMAIL="seifeldin.sabry@student.kdg.be"
-SYSTEMD_BACKEND_SERVICE_NAME="chatapp.backend.service"
+SYSTEMD_BACKEND_SERVICE_NAME="backend.service"
 SYSTEMD_BACKEND_SERVICE_PATH="/etc/systemd/system/${SYSTEMD_BACKEND_SERVICE_NAME}"
-SYSTEMD_BACKEND_SERVICE_CONTENT=$(cat ./script/systemd_backend.txt)
-SYSTEMD_FRONTEND_SERVICE_NAME="chatapp.frontend.service"
+SYSTEMD_BACKEND_SERVICE_CONTENT=$(cat ./script/systemd_backend)
+SYSTEMD_FRONTEND_SERVICE_NAME="frontend.service"
 SYSTEMD_FRONTEND_SERVICE_PATH="/etc/systemd/system/${SYSTEMD_FRONTEND_SERVICE_NAME}"
-SYSTEMD_FRONTEND_SERVICE_CONTENT=$(cat ./script/systemd_frontend.txt)
-NGINX_CONFIG=$(cat ./script/nginx_config.txt)
+SYSTEMD_FRONTEND_SERVICE_CONTENT=$(cat ./script/systemd_frontend)
+NGINX_CONFIG=$(cat ./script/nginx_config)
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
@@ -45,6 +45,7 @@ function create_vm() {
       ufw allow 'Nginx HTTPS'
       ufw allow 80
       ufw allow 443
+      ufw enable
       echo $SYSTEMD_BACKEND_SERVICE_CONTENT > $SYSTEMD_BACKEND_SERVICE_PATH
       echo $SYSTEMD_FRONTEND_SERVICE_CONTENT > $SYSTEMD_FRONTEND_SERVICE_PATH
       systemctl daemon-reload
@@ -55,7 +56,7 @@ function create_vm() {
       echo $NGINX_CONFIG > /etc/nginx/sites-available/$DOMAIN_NAME
       ln -s /etc/nginx/sites-available/$DOMAIN_NAME /etc/nginx/sites-enabled/
       systemctl restart nginx
-      git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git ~/chatapp-infra
+      git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra 2> /tmp/git_error
       while ! which certbot > /dev/null; do sleep 1; done
       certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL
       "

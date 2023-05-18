@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=~/chatapp-infra/backend
+WorkingDirectory=/chatapp-infra/backend
 ExecStart=bash -c "npm install && npm start"
 
 Restart=on-failure

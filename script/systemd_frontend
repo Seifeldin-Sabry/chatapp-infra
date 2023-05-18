@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=~/chatapp-infra/frontend
+WorkingDirectory=/chatapp-infra/frontend
 ExecStart=bash -c "npm install && npm run build && vite --port 80 && vite preview"
 
 Restart=on-failure
