@@ -12,7 +12,8 @@
     "postgres": "^3.3.4",
     "vue": "^3.2.47",
     "tailwind-dracula": "^1.1.0",
-    "tailwind-scrollbar": "^3.0.4"
+    "tailwind-scrollbar": "^3.0.4",
+    "vue-socket.io": "^3.0.10"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",

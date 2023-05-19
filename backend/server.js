@@ -14,6 +14,34 @@ const port = process.env.PORT || 3002;
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}`);
 });
+const ws = require('ws');
+const {parse} = require("url");
+
+const wsServer = new ws.Server({ server });
+wsServer.on('connection', function(ws, req)  {
+  const parameters = parse(req.url, true);
+  ws.userId=parameters.query.userId;
+
+  ws.on('message', function message(data, isBinary) {
+    const message = isBinary ? data : data.toString();
+    const jsonMsg= JSON.parse(message);
+
+    wsServer.clients.forEach(client => {
+      if (client.readyState === 1) {
+        if(client.userId===jsonMsg.receiver) {
+          client.send(data.toString());
+        }
+      }
+    });
+  });
+
+  ws.on('close', () => {
+    // Log a message when a client disconnects
+    console.log('Client disconnected');
+  });
+
+
+});
 
 process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection! shutting down...');
