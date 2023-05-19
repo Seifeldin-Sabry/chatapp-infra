@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VM_NAME="chatapp-vm"
+VM_NAME="chatapp-vm-test"
 REGION="europe-west1"
 ZONE="europe-west1-b"
 MACHINE_TYPE="e2-small"
@@ -12,8 +12,6 @@ DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
 DOMAIN_NAME="globalchat.tech"
 EMAIL="seifeldin.sabry@student.kdg.be"
-NGINX_CONFIG="$(cat ./script/nginx_config)"
-NGINX_CONFIG_PATH="/etc/nginx/sites-available/default"
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
@@ -26,26 +24,25 @@ function create_vm() {
       --image-family="$IMAGE_FAMILY" \
       --image-project="$IMAGE_PROJECT" \
       --metadata=startup-script="#!/bin/bash
-      apt-get update
-      curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
-      apt-get install -y nodejs vite postgresql postgresql-contrib git certbot python3-certbot-nginx nginx
+      sudo apt update && sudo apt upgrade -y
+      curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+      sudo apt-get install -y nodejs
+      sudo apt-get install -y vite postgresql postgresql-contrib git certbot
       service postgresql start
       ufw allow 80
       ufw allow 443
       ufw allow 22
-      ufw allow 'Nginx Full'
-      ufw allow 'OpenSSH'
       ufw enable
-      echo \"$NGINX_CONFIG\" > $NGINX_CONFIG_PATH
-      systemctl restart nginx
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
       while ! which certbot > /dev/null; do sleep 1; done
-      # certbot --nginx -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
-      echo \"$(cat ./script/systemd_backend.service)\" > /etc/systemd/system/chatapp-backend.service
-      echo \"$(cat ./script/systemd_frontend.service)\" > /etc/systemd/system/chatapp-frontend.service
+      cp /chatapp-infra/script/systemd_backend.service /etc/systemd/system/chatapp-backend.service
+      cp /chatapp-infra/script/systemd_frontend.service /etc/systemd/system/chatapp-frontend.service
       systemctl daemon-reload
+#      certbot --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
       systemctl enable chatapp-backend.service
       systemctl enable chatapp-frontend.service
+      systemctl start chatapp-backend.service
+      systemctl start chatapp-frontend.service
       "
 }
 
