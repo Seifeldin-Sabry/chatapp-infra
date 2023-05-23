@@ -29,10 +29,20 @@ export default {
   },
   async created() {
 
+    console.log("using user id : " + this.userId)
     const response = await fetch(`http://localhost:3002/api/users/${this.userId}/chats`)
     const {data: chats} = await response.json()
     this.chats = chats.chats
+    console.log(this.chats)
 
+
+  },
+  async updated(){
+    if(this.userId!==null){
+    const response = await fetch(`http://localhost:3002/api/users/${this.userId}/chats`)
+    const {data: chats} = await response.json()
+    this.chats = chats.chats
+    }
 
   }
 }

@@ -25,6 +25,8 @@ export default defineComponent({
       const {data: messages} = await response.json()
       this.messages = messages.messages.reverse()
     }
+
+    console.log("created with id "+this.chatId)
   },
   methods: {
     sendMessage() {
@@ -33,8 +35,10 @@ export default defineComponent({
       this.connection.send(JSON.stringify(messageData))
       // Add the message data to the messages array
       // this.messages.unshift(messageData);
+      console.log("works till here")
+      console.log("using id" + this.chatId)
       if (this.text.length > 0) {
-        fetch("http://localhost:3002/api/chats/1/messages", {
+        fetch(`http://localhost:3002/api/chats/${this.chatId}/messages`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
