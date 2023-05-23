@@ -14,7 +14,7 @@ export default {
       const data = Object.fromEntries(formData);
       console.log(data);
       // console.log(data);
-      fetch(`/api/auth/${this.loginRegister}`, {
+      fetch(`http://localhost:3002/api/auth/${this.loginRegister}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

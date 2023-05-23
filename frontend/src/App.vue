@@ -91,7 +91,7 @@ export default defineComponent({
       }
     },
     addContact(name){
-      fetch("/api/chats", {
+      fetch("http://localhost:3002/api/chats", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

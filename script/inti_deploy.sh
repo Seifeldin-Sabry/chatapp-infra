@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VM_NAME="chatapp-vm"
+VM_NAME="chatapp-vm-test-2"
 REGION="europe-west1"
 ZONE="europe-west1-b"
 MACHINE_TYPE="e2-small"
@@ -46,12 +46,12 @@ function create_vm() {
       cp /chatapp-infra/script/nginx_config /etc/nginx/sites-available/default
       systemctl daemon-reload
 #      make self signed certificate
-      openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj \"/C=BE/ST=Antwerp/L=Antwerp/O=KdG/OU=IT/CN=$DOMAIN_NAME\"
-      openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
-      cp /chatapp-infra/script/self-signed.conf /etc/nginx/snippets/self-signed.conf
-      cp /chatapp-infra/script/ssl-params.conf /etc/nginx/snippets/ssl-params.conf
-      cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-      ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+#      openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj \"/C=BE/ST=Antwerp/L=Antwerp/O=KdG/OU=IT/CN=$DOMAIN_NAME\"
+#      openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+#      cp /chatapp-infra/script/self-signed.conf /etc/nginx/snippets/self-signed.conf
+#      cp /chatapp-infra/script/ssl-params.conf /etc/nginx/snippets/ssl-params.conf
+#      cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+#      ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
       systemctl restart nginx
 #      certbot --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
       systemctl start chatapp-backend.service

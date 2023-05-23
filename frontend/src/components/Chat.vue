@@ -21,7 +21,7 @@ export default defineComponent({
     //TODO: add the actual user name instead of hardcoding
     if (this.chatId !== 0) {
 
-      const response = await fetch(`/api/chats/${this.chatId}/messages`)
+      const response = await fetch(`http://localhost:3002/api/chats/${this.chatId}/messages`)
       const {data: messages} = await response.json()
       this.messages = messages.messages.reverse()
     }
@@ -38,7 +38,7 @@ export default defineComponent({
       console.log("works till here")
       console.log("using id" + this.chatId)
       if (this.text.length > 0) {
-        fetch(`/api/chats/${this.chatId}/messages`, {
+        fetch(`http://localhost:3002/api/chats/${this.chatId}/messages`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

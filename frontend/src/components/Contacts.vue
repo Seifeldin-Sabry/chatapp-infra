@@ -18,7 +18,7 @@ export default {
     async filterContacts(name) {
       console.log("filtering")
       console.log(name)
-      const response = await fetch(`/api/users/${this.userId}/chats`)
+      const response = await fetch(`http://localhost:3002/api/users/${this.userId}/chats`)
       const {data: chats} = await response.json()
       this.chats = chats.chats.filter((chat)=>{
         return chat.user2.toLowerCase().includes(name.toLowerCase())||chat.user1.toLowerCase().includes(name.toLowerCase())
@@ -30,7 +30,7 @@ export default {
   async created() {
 
     console.log("using user id : " + this.userId)
-    const response = await fetch(`/api/users/${this.userId}/chats`)
+    const response = await fetch(`http://localhost:3002/api/users/${this.userId}/chats`)
     const {data: chats} = await response.json()
     this.chats = chats.chats
     console.log(this.chats)
@@ -39,7 +39,7 @@ export default {
   },
   async updated(){
     if(this.userId!==null){
-    const response = await fetch(`/api/users/${this.userId}/chats`)
+    const response = await fetch(`http://localhost:3002/api/users/${this.userId}/chats`)
     const {data: chats} = await response.json()
     this.chats = chats.chats
     }
