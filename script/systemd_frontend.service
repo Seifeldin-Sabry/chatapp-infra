@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/chatapp-infra/frontend
-ExecStart=/usr/bin/npm i && /usr/bin/npm run build && /usr/bin/npm run start
+ExecStart=/usr/bin/npm run preview
 
 Restart=on-failure
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VM_NAME="chatapp-vm-test"
+VM_NAME="chatapp-vm"
 REGION="europe-west1"
 ZONE="europe-west1-b"
 MACHINE_TYPE="e2-small"
@@ -33,11 +33,11 @@ function create_vm() {
       ufw allow 443
       ufw allow 22
       ufw enable
-      echo $(cat ./script/nginx.config) > /etc/nginx/sites-available/default
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
 #      while ! which certbot > /dev/null; do sleep 1; done
       cp /chatapp-infra/script/systemd_backend.service /etc/systemd/system/chatapp-backend.service
       cp /chatapp-infra/script/systemd_frontend.service /etc/systemd/system/chatapp-frontend.service
+      cp /chatapp-infra/script/nginx_config /etc/nginx/sites-available/default
       systemctl daemon-reload
 #      certbot --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
       systemctl start chatapp-backend.service
