@@ -51,6 +51,7 @@ function create_vm() {
       cp /chatapp-infra/script/self-signed.conf /etc/nginx/snippets/self-signed.conf
       cp /chatapp-infra/script/ssl-params.conf /etc/nginx/snippets/ssl-params.conf
       cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+      ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
       systemctl restart nginx
 #      certbot --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
       systemctl start chatapp-backend.service

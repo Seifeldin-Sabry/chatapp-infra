@@ -1,16 +1,20 @@
 server {
-    listen      80;
-    server_name globalchat.tech www.globalchat.tech;
-    return 302 https://$server_name$request_uri;
-    charset utf-8;
-    root    /chatapp-infra/frontend/dist;
-    index   index.html;
-    location / {
-        root /chatapp-infra/frontend/dist;
-        try_files $uri  /index.html;
-    }
-    error_log  /var/log/nginx/vue-app-error.log;
-    access_log /var/log/nginx/vue-app-access.log;
+        listen 80;
+        listen [::]:80;
+        root /chatapp-infra/frontend/build;
+        index index.html;
+        server_name globalchat.tech www.globalchat.tech;
+        location / {
+                    try_files $uri /index.html;
+                   }
+        location /api {
+            proxy_pass http://localhost:3002;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+           }
 }
 
 server {

@@ -68,7 +68,7 @@ export default {
       console.log("first-filtering")
       console.log(this.search)
       // this.newContacts
-      fetch(`http://localhost:3002/api/users/${this.search}/users`)
+      fetch(`/api/users/${this.search}/users`)
           .then(response => response.json())
           .then(data => {
             console.log(data.data.users)
