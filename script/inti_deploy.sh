@@ -24,23 +24,22 @@ function create_vm() {
       --image-family="$IMAGE_FAMILY" \
       --image-project="$IMAGE_PROJECT" \
       --metadata=startup-script="#!/bin/bash
-      sudo apt update && sudo apt upgrade -y
-      curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+      apt update && sudo apt upgrade -y
+      sudo curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
       sudo apt-get install -y nodejs
-      sudo apt-get install -y vite postgresql postgresql-contrib git certbot
+      apt-get install -y vite postgresql postgresql-contrib git certbot nginx python3-certbot-nginx
       service postgresql start
       ufw allow 80
       ufw allow 443
       ufw allow 22
       ufw enable
+      echo $(cat ./script/nginx.config) > /etc/nginx/sites-available/default
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
-      while ! which certbot > /dev/null; do sleep 1; done
+#      while ! which certbot > /dev/null; do sleep 1; done
       cp /chatapp-infra/script/systemd_backend.service /etc/systemd/system/chatapp-backend.service
       cp /chatapp-infra/script/systemd_frontend.service /etc/systemd/system/chatapp-frontend.service
       systemctl daemon-reload
 #      certbot --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
-      systemctl enable chatapp-backend.service
-      systemctl enable chatapp-frontend.service
       systemctl start chatapp-backend.service
       systemctl start chatapp-frontend.service
       "
