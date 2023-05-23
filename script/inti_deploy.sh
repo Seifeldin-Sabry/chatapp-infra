@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VM_NAME="chatapp-vm-test-2"
+VM_NAME="chatapp-vm"
 REGION="europe-west1"
 ZONE="europe-west1-b"
 MACHINE_TYPE="e2-small"
@@ -30,30 +30,19 @@ function create_vm() {
       apt update && sudo apt upgrade -y
       sudo curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
       sudo apt-get install -y nodejs
-      apt-get install -y vite postgresql postgresql-contrib git certbot nginx python3-certbot-nginx
+      apt-get install -y vite postgresql postgresql-contrib git nginx
       service postgresql start
       ufw allow 80
       ufw allow 443
       ufw allow 22
-      ufw allow 'Nginx Full'
-      ufw allow 'OpenSSH'
       nginx -t
       ufw enable
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
-#      while ! which certbot > /dev/null; do sleep 1; done
       cp /chatapp-infra/script/systemd_backend.service /etc/systemd/system/chatapp-backend.service
       cp /chatapp-infra/script/systemd_frontend.service /etc/systemd/system/chatapp-frontend.service
       cp /chatapp-infra/script/nginx_config /etc/nginx/sites-available/default
       systemctl daemon-reload
-#      make self signed certificate
-#      openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj \"/C=BE/ST=Antwerp/L=Antwerp/O=KdG/OU=IT/CN=$DOMAIN_NAME\"
-#      openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
-#      cp /chatapp-infra/script/self-signed.conf /etc/nginx/snippets/self-signed.conf
-#      cp /chatapp-infra/script/ssl-params.conf /etc/nginx/snippets/ssl-params.conf
-#      cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-#      ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
       systemctl restart nginx
-#      certbot --standalone -d $DOMAIN_NAME --non-interactive --agree-tos -m $EMAIL -w /chatapp-infra/frontend/dist
       systemctl start chatapp-backend.service
       systemctl start chatapp-frontend.service
       "
