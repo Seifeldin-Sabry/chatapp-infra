@@ -9,18 +9,19 @@
     "preview": "npm i && npm run build && vite preview --port 81"
   },
   "dependencies": {
+    "http-proxy-middleware": "^2.0.6",
     "postgres": "^3.3.4",
-    "vue": "^3.2.47",
     "tailwind-dracula": "^1.1.0",
     "tailwind-scrollbar": "^3.0.4",
+    "vue": "^3.2.47",
     "vue-socket.io": "^3.0.10"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.1",
     "@vitejs/plugin-vue": "^4.1.0",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
     "tailwindcss": "^3.3.2",
-    "@faker-js/faker" : "^8.0.1",
     "vite": "^4.3.2"
   }
 }
