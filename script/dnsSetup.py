@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # Description: This script is used to get the DNS records from OVH API
 import ovh
+import os
+
+IP = os.getenv('IP_ADDRESS')
 
 # Instanciate an OVH Client.
 client = ovh.Client(
@@ -11,7 +14,7 @@ client = ovh.Client(
 )
 
 result = client.get("/domain/zone/mocanupaulc.com/record", fieldType='A')
-client.put('/domain/zone/mocanupaulc.com/record/{}'.format(result[0]), target='35.241.221.72',ttl=60)
-client.put('/domain/zone/mocanupaulc.com/record/{}'.format(result[1]), target='35.241.221.72',ttl=60,subDomain='www')
+client.put('/domain/zone/mocanupaulc.com/record/{}'.format(result[0]), target=IP,ttl=60)
+client.put('/domain/zone/mocanupaulc.com/record/{}'.format(result[1]), target=IP,ttl=60,subDomain='www')
 refresh=client.post('/domain/zone/mocanupaulc.com/refresh')
 
