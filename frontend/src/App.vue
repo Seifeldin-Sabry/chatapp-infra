@@ -124,7 +124,7 @@ export default defineComponent({
     </div>
     <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
       <div id="app">
-        <button type="button" class="btn" @click="showModal">Add Contact!</button>
+        <button  type="button" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded" @click="showModal">Add Contact!</button>
         <Modal @add-contact="addContact" v-show="isModalVisible" @close="closeModal"/>
       </div>
       <Contacts @select-chat="selectChat" :key="contactsKeyy" :userId="userId"></Contacts>
