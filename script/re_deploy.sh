@@ -5,5 +5,16 @@ vm_zone="europe-west1-b"
 frontend_service="chatapp-frontend.service"
 backend_service="chatapp-backend.service"
 
-gcloud compute ssh "$vm_name" --zone="$vm_zone" --command="sudo su && git config --global --add safe.directory /chatapp-infra && systemctl stop $frontend_service && systemctl stop $backend_service && cd /chatapp-infra && git reset --hard origin/main && git pull origin main && systemctl start $backend_service && systemctl start $frontend_service"
+# Stop the services
+gcloud compute ssh $vm_name --zone $vm_zone --command "sudo systemctl stop $frontend_service"
+gcloud compute ssh $vm_name --zone $vm_zone --command "sudo systemctl stop $backend_service"
 
+# Pull the latest code
+gcloud compute ssh $vm_name --zone $vm_zone --command "cd /chatapp-infra && sudo git reset --hard HEAD && sudo git pull"
+
+# Copy the public folder
+gcloud compute ssh $vm_name --zone $vm_zone --command "cd /chatapp-infra && sudo gsutil cp gs://chatapp-infra/public ./frontend/public -r"
+
+# Start the services
+gcloud compute ssh $vm_name --zone $vm_zone --command "sudo systemctl start $frontend_service"
+gcloud compute ssh $vm_name --zone $vm_zone --command "sudo systemctl start $backend_service"
