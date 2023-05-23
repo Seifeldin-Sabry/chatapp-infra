@@ -14,7 +14,6 @@ DOMAIN_NAME="globalchat.tech"
 EMAIL="seifeldin.sabry@student.kdg.be"
 PROJECT_ID="infra3-seifeldin-sabry"
 VPC_NAME="chatapp-vpc"
-SUBNET_NAME="chatapp-subnet"
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
@@ -22,6 +21,7 @@ function create_vm() {
   fi
   gcloud compute instances create "$VM_NAME" \
       --zone="$ZONE" \
+      --network="$VPC_NAME" \
       --machine-type="$MACHINE_TYPE" \
       --tags="$TARGET_TAGS" \
       --image-family="$IMAGE_FAMILY" \
@@ -116,20 +116,6 @@ function wait_for_psql() {
   done
   echo "psql ready"
 }
-
-
-# Function to configure GCloud Storage for static files with open access
-#function configure_gcloud_storage() {
-#  # Create the GCloud Storage bucket
-#  gsutil mb gs://"$BUCKET_NAME"
-#  # Upload static files to the bucket
-#  gsutil -m cp -r "$STATIC_FILES_DIR/*" gs://"$BUCKET_NAME"/
-#  # Set appropriate permissions on the bucket
-#  gsutil -m acl ch -r -u allUsers:R gs://"$BUCKET_NAME"
-#}
-
-# Call the function to configure GCloud Storage for static files
-# configure_gcloud_storage
 
 create_vm
 get_instance_ip
