@@ -5,6 +5,13 @@ server {
         index index.html;
         server_name mocanupaulc.com www.mocanupaulc.com;
         location / {
-           try_files $uri /index.html;
+           proxy_pass http://localhost:81;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+        }
+        location /api {
+           proxy_pass http://localhost:3002;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
         }
 }
