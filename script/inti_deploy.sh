@@ -12,6 +12,9 @@ DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
 DOMAIN_NAME="globalchat.tech"
 EMAIL="seifeldin.sabry@student.kdg.be"
+PROJECT_ID="infra3-seifeldin-sabry"
+VPC_NAME="chatapp-vpc"
+SUBNET_NAME="chatapp-subnet"
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
