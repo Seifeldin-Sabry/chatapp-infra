@@ -80,7 +80,7 @@ export default defineComponent({
     },
     connectWs(){
       console.log("Starting connection to WebSocket Server")
-      this.connection = new WebSocket("ws://" + window.location.host + "/api?userId=" + this.userId);
+      this.connection = new WebSocket("ws://" + window.location.port + "/api?userId=" + this.userId);
 
 
       // this.connection.on
