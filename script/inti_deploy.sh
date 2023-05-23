@@ -10,9 +10,6 @@ TARGET_TAGS="http-server,ssl-rule-tag,ssh,https-server,default-allow-ssh"
 SQL_INSTANCE_NAME="chatapp"
 DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
-DOMAIN_NAME="globalchat.tech"
-EMAIL="seifeldin.sabry@student.kdg.be"
-PROJECT_ID="infra3-seifeldin-sabry"
 VPC_NAME="chatapp-vpc"
 
 function create_vm() {
