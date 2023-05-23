@@ -13,7 +13,7 @@ gcloud compute ssh $vm_name --zone $vm_zone --command "sudo systemctl stop $back
 gcloud compute ssh $vm_name --zone $vm_zone --command "cd /chatapp-infra && sudo git reset --hard HEAD && sudo git pull"
 
 # Copy the public folder
-gcloud compute ssh $vm_name --zone $vm_zone --command "cd /chatapp-infra && sudo gsutil cp gs://chatapp-infra/public ./frontend/public -r"
+gcloud compute ssh $vm_name --zone $vm_zone --command "cd /chatapp-infra && sudo gsutil cp -r gs://chatapp-infra/public ./frontend/public"
 
 # Start the services
 gcloud compute ssh $vm_name --zone $vm_zone --command "sudo systemctl start $frontend_service"
