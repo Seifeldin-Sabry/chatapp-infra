@@ -25,6 +25,10 @@ wsServer.on('connection', function (ws, req) {
 
     ws.on('message', function message(data, isBinary) {
         const message = isBinary ? data : data.toString();
+        if(message === "ping"){
+            ws.send("pong");
+            return;
+        }
         const jsonMsg = JSON.parse(message);
         if (jsonMsg.type === "message") {
             wsServer.clients.forEach(client => {
