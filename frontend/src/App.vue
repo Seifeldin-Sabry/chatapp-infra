@@ -124,10 +124,10 @@ export default defineComponent({
       <LoginForm @login="login" @register="register"></LoginForm>
     </div>
     <div v-else>
-    <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
+    <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts">
       <Contacts @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
     </div>
-    <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
+    <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat">
       <Chat  :receiver="this.currentContact" :current-messages="this.currentMessages" :connection="this.connection"
             :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
     </div>
