@@ -123,8 +123,8 @@ export default defineComponent({
 
 <template>
   <div class="w-screen h-screen flex justify-center content-center items-center">
-    <div class="h-[80vh] w-[80vh] " id="login-form-container">
-      <LoginForm v-if="!isLoggedIn" @login="login" @register="register"></LoginForm>
+    <div class="h-[80vh] w-[80vh]" v-if="!isLoggedIn" id="login-form-container">
+      <LoginForm @login="login" @register="register"></LoginForm>
     </div>
     <div v-if="isLoggedIn" class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
       <Contacts v-if="isLoggedIn" @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
