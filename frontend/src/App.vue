@@ -75,12 +75,12 @@ export default defineComponent({
       this.connection = new WebSocket("ws:" + window.location.host + "/socket?userId=" + this.userId)
 
       this.connection.onmessage = (event) => {
-        console.log(event.data)
+        console.log(event)
         if (event.data.type === 'chat') {
           console.log("received chat message")
           this.contactsKey += 1;
         }
-        if (event.data().chatId !== null) {
+        if (event.data.chatId !== null) {
           if (this.currentContact === event.data.sender) {
             this.currentMessages.unshift(JSON.parse(event.data))
           }
