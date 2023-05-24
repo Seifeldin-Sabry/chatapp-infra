@@ -46,7 +46,7 @@ export default defineComponent({
           })
         }).then(response => response.json())
             .then(data => {
-              this.currentMessages.unshift(data.data.message[0])
+              this.currentMessages[0].unshift(data.data.message[0])
             })
             .catch((error) => {
               console.error('Error:', error);
