@@ -16,8 +16,8 @@ exports.getMessages = async (req, res, next) => {
     })
 }
 
-exports.getChat = async(userId, receiverId) =>{
-    return await sql`
+exports.getChat = (userId, receiverId) =>{
+    return sql`
         select *
         from chat
         where user1 = ${userId}
