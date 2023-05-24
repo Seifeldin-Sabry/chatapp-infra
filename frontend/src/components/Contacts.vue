@@ -66,12 +66,11 @@ export default {
     },
   },
   async created() {
+    console.log("created contacts")
     if (this.userId === null) {
       return
     }
-    document.getElementById("login-form-container").hidden = true;
-    document.getElementById("contacts").hidden = false;
-    document.getElementById("chat").hidden = false;
+    console.log("fetching chats")
     const response = await fetch(`/api/users/${this.userId}/chats`)
     const {data: chats} = await response.json()
     this.chats = chats.chats
