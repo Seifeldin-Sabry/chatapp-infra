@@ -14,6 +14,7 @@ export default defineComponent({
 
     //TODO: add the actual user name instead of hardcoding
     if (this.chatId !== 0) {
+      this.currentMessages = []
 
       const response = await fetch(`/api/chats/${this.chatId}/messages`)
       const {data: messages} = await response.json()
