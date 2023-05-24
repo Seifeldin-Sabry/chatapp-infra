@@ -43,16 +43,17 @@ wsServer.on('connection', function (ws, req) {
                         let chat =  getChat(jsonMsg.sender, jsonMsg.receiver)
                             .then((result) => {
                                 console.log(result)
-                                data = result
+                                data = result[0]
+                                console.log("here")
+                                console.log(data)
+                                chat.type = "chat";
+                                // client.send(JSON.stringify(chat));
+                                console.log(data);
+                                client.send(data);
                             })
 
                         // (chat => {
-                            console.log("here")
-                            console.log(data)
-                            chat.type = "chat";
-                            // client.send(JSON.stringify(chat));
-                            console.log(data);
-                            client.send(data);
+
                         // });
                     }
                 }
