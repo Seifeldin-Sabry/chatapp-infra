@@ -75,6 +75,7 @@ export default defineComponent({
       this.connection = new WebSocket("ws:" + window.location.host + "/socket?userId=" + this.userId)
 
       this.connection.onmessage = (event) => {
+        console.log(event.data)
         if(event.data.type==='chat'){
           console.log("received chat message")
           this.contactsKey+=1;
