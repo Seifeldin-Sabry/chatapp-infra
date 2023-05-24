@@ -1,6 +1,5 @@
 <script>
 
-import {th} from "@faker-js/faker";
 
 export default {
   props: ['name'],

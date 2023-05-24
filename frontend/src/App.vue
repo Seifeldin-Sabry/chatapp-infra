@@ -6,7 +6,6 @@ import {th} from '@faker-js/faker';
 import {defineComponent} from "vue";
 import LoginForm from "./components/LoginForm.vue";
 import SearchContact from "./components/SearchContact.vue";
-import {emitter} from "./main.js";
 
 export default defineComponent({
   computed: {

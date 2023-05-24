@@ -2,7 +2,6 @@
 import Contact from "./Contact.vue";
 import SearchContact from "./SearchContact.vue";
 import Modal from "./Modal.vue";
-import {th} from "@faker-js/faker";
 
 export default {
   props: ['userId','connection'],
@@ -67,14 +66,9 @@ export default {
     const {data: chats} = await response.json()
     this.chats = chats.chats
     console.log(this.chats)
-  },
-  mounted() {
-    this.emmiter.$on('add-chat', (data) => {
-      console.log("add chat event received")
-      console.log(data)
-      this.chats.push(data)
-    })
-  },
+  }
+
+
 
   // },
   // async updated() {
