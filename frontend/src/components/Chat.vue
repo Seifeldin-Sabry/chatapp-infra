@@ -63,8 +63,8 @@ export default defineComponent({
 <template>
   <div class="flex flex-col flex-grow w-full h-full bg-gray-700 shadow-xl rounded-lg">
     <div class="flex flex-col-reverse flex-grow h-0 p-4 overflow-auto no-scrollbar ">
-      <TextBubble v-for="(item, index) in currentMessages" :key="index" :text="currentMessages[index].message"
-                  :current-user="userId" :sender="currentMessages[index].sender" :customProp="item"/>
+      <TextBubble v-for="(item, index) in currentMessages[0]" :key="index" :text="currentMessages[0][index].message"
+                  :current-user="userId" :sender="currentMessages[0][index].sender" :customProp="item"/>
     </div>
     <div class="bg-orange-800 p-4">
       <input @keyup.enter="sendMessage" v-model="text"
