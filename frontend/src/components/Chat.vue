@@ -3,7 +3,7 @@ import TextBubble from "./TextBubble.vue";
 import {defineComponent} from "vue";
 
 export default defineComponent({
-  props: ['chatId', 'userId', 'connection','receiver'],
+  props: ['chatId', 'userId', 'connection','receiver','messages'],
   components: {TextBubble},
   data() {
     return {
@@ -13,11 +13,6 @@ export default defineComponent({
   },
   async created() {
 
-    this.connection.onmessage = (event) => {
-      if(this.currentContact===event.data.sender){
-        this.messages.unshift(JSON.parse(event.data))
-      }
-    }
     //TODO: add the actual user name instead of hardcoding
     if (this.chatId !== 0) {
 
@@ -30,7 +25,7 @@ export default defineComponent({
   },
   methods: {
     sendMessage() {
-      const messageData = {receiver:this.receiver,sender: this.userId, chat_id: this.chatId, message: this.text};
+      const messageData = {type:"message",receiver:this.receiver,sender: this.userId, chat_id: this.chatId, message: this.text};
       // Send the message data to the server using WebSockets
       this.connection.send(JSON.stringify(messageData))
       // Add the message data to the messages array

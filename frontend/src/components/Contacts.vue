@@ -4,7 +4,7 @@ import SearchContact from "./SearchContact.vue";
 import Modal from "./Modal.vue";
 
 export default {
-  props: ['userId'],
+  props: ['userId','connection'],
   components: {Modal,Contact, SearchContact},
   data() {
     return {
@@ -42,7 +42,9 @@ export default {
           .then(data => {
             console.log("response to post chat")
             console.log(data)
-            this.chats.push(data)
+            this.chats.push(data.chat[0])
+            const messageData = {type:"newChat",receiver:name,sender: this.userId};
+            this.connection.send(JSON.stringify(messageData))
           })
           .catch((error) => {
             console.error('Error:', error);

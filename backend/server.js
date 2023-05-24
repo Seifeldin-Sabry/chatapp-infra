@@ -16,6 +16,7 @@ const server = app.listen(port, () => {
 });
 const ws = require('ws');
 const {parse} = require("url");
+const {getChat} = require("./controllers/chatController");
 
 const wsServer = new ws.Server({ server });
 wsServer.on('connection', function(ws, req)  {
@@ -25,14 +26,29 @@ wsServer.on('connection', function(ws, req)  {
   ws.on('message', function message(data, isBinary) {
     const message = isBinary ? data : data.toString();
     const jsonMsg= JSON.parse(message);
-
-    wsServer.clients.forEach(client => {
-      if (client.readyState === 1) {
-        if(client.userId===jsonMsg.receiver) {
-          client.send(data.toString());
+    if(jsonMsg.type==="message") {
+      wsServer.clients.forEach(client => {
+        if (client.readyState === 1) {
+          if(client.userId===jsonMsg.receiver) {
+            client.send(data.toString());
+          }
         }
-      }
-    });
+      });
+    }
+    else {
+        wsServer.clients.forEach(client => {
+            if (client.readyState === 1) {
+            if(client.userId===jsonMsg.receiver) {
+              // get chat to add from server
+              getChat(jsonMsg.sender, jsonMsg.receiver).then(chat => {
+                client.send(chat[0].toString());
+              });
+            }
+            }
+        });
+    }
+
+
   });
 
   ws.on('close', () => {
