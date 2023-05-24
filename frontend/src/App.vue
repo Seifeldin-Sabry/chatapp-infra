@@ -76,12 +76,14 @@ export default defineComponent({
 
       this.connection.onmessage = (event) => {
         console.log(event)
-        if (event.data.type === 'chat') {
+        console.log(event.data)
+        let new_chat=JSON.parse(event.data)
+        if (new_chat.type === 'chat') {
           console.log("received chat message")
           this.contactsKey += 1;
         }
-        if (event.data.chatId !== null) {
-          if (this.currentContact === event.data.sender) {
+        if (new_chat.chatId !== null) {
+          if (this.currentContact === new_chat.sender) {
             this.currentMessages.unshift(JSON.parse(event.data))
           }
         }
