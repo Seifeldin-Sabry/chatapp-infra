@@ -12,6 +12,8 @@ DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
 VPC_NAME="chatapp-vpc"
 BUCKET_NAME="chatapp-infra"
+EMAIL="seifeldin.sabry@student.kdg.be"
+DOMAINS="mocanupaulc.com,www.mocanupaulc.com"
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
@@ -28,7 +30,7 @@ function create_vm() {
       apt update && sudo apt upgrade -y
       sudo curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
       sudo apt-get install -y nodejs
-      apt-get install -y vite postgresql postgresql-contrib git nginx
+      apt-get install -y vite postgresql postgresql-contrib git nginx certbot python3-certbot-nginx
       service postgresql start
       ufw allow 80
       ufw allow 443
@@ -43,6 +45,7 @@ function create_vm() {
       cp /chatapp-infra/script/nginx_config /etc/nginx/sites-available/default
       systemctl daemon-reload
       systemctl restart nginx
+      certbot --nginx --non-interactive -m $EMAIL --agree-tos --domains=$DOMAINS
       systemctl start chatapp-backend.service
       systemctl start chatapp-frontend.service
       "
