@@ -11,6 +11,7 @@ SQL_INSTANCE_NAME="chatapp"
 DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
 VPC_NAME="chatapp-vpc"
+BUCKET_NAME="chatapp-infra"
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
@@ -116,6 +117,26 @@ function wait_for_psql() {
   echo "psql ready"
 }
 
+function check_bucket_exists() {
+  if gsutil ls -b gs://"$BUCKET_NAME" 1>/dev/null 2>/dev/null; then
+    echo "Bucket ${BUCKET_NAME} exists"
+  else
+    echo "Bucket ${BUCKET_NAME} does not exist, please create it first"
+    exit 1
+  fi
+}
+
+function check_vpc_network_exists() {
+  if gcloud compute networks describe "$VPC_NAME" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
+    echo "VPC ${VPC_NAME} exists"
+  else
+    echo "VPC ${VPC_NAME} does not exist, please create it first"
+    exit 1
+  fi
+}
+
+check_vpc_network_exists
+check_bucket_exists
 create_vm
 get_instance_ip
 create_sql_instance
