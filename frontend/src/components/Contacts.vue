@@ -5,7 +5,7 @@ import Modal from "./Modal.vue";
 import {th} from "@faker-js/faker";
 
 export default {
-  props: ['userId','connection','eventBus'],
+  props: ['userId','connection'],
   components: {Modal,Contact, SearchContact},
   data() {
     return {
@@ -69,7 +69,7 @@ export default {
     console.log(this.chats)
   },
   mounted() {
-    this.eventBus.$on('add-chat', (data) => {
+    this.emmiter.$on('add-chat', (data) => {
       console.log("add chat event received")
       console.log(data)
       this.chats.push(data)

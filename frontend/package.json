@@ -14,7 +14,8 @@
     "tailwind-dracula": "^1.1.0",
     "tailwind-scrollbar": "^3.0.4",
     "vue": "^3.2.47",
-    "vue-socket.io": "^3.0.10"
+    "vue-socket.io": "^3.0.10",
+    "mitt": "^3.0.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.1",

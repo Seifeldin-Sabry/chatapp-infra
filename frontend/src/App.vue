@@ -6,8 +6,6 @@ import {th} from '@faker-js/faker';
 import {defineComponent} from "vue";
 import LoginForm from "./components/LoginForm.vue";
 import SearchContact from "./components/SearchContact.vue";
-import { eventBus } from "./eventBus";
-import Modal from "./components/Modal.vue";
 
 export default defineComponent({
   computed: {
@@ -18,7 +16,6 @@ export default defineComponent({
   components: {SearchContact, LoginForm, Chat, Contacts},
   data() {
     return {
-      eventBus,
       contactsKey: 500,
       chatId: 0,
       userId: null,
@@ -80,7 +77,7 @@ export default defineComponent({
       this.connection.onmessage = (event) => {
         if(event.data.type==='chat'){
           console.log("received chat message")
-          eventBus.$emit('new-chat',event.data)
+          this.emmiter.$emit('new-chat',event.data)
         }else if(this.currentContact===event.data.sender){
           this.currentMessages.unshift(JSON.parse(event.data))
         }
@@ -105,7 +102,7 @@ export default defineComponent({
       <LoginForm @login="login" @register="register"></LoginForm>
     </div>
     <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
-      <Contacts :event-bus="eventBus" @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
+      <Contacts @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
     </div>
     <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
       <Chat  :receiver="this.currentContact" :messages="currentMessages" :connection="this.connection" :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
