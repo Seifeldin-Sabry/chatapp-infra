@@ -64,17 +64,17 @@ export default {
     const {data: chats} = await response.json()
     this.chats = chats.chats
     console.log(this.chats)
-
-
-  },
-  async updated() {
-    if (this.userId !== null) {
-      const response = await fetch(`/api/users/${this.userId}/chats`)
-      const {data: chats} = await response.json()
-      this.chats = chats.chats
-    }
-
   }
+
+  // },
+  // async updated() {
+  //   if (this.userId !== null) {
+  //     const response = await fetch(`/api/users/${this.userId}/chats`)
+  //     const {data: chats} = await response.json()
+  //     this.chats = chats.chats
+  //   }
+  //
+  // }
 }
 </script>
 
