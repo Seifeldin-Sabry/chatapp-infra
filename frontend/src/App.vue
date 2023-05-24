@@ -18,21 +18,15 @@ export default defineComponent({
     return {
       contactsKey: 500,
       chatId: 0,
-      userId: null,
+      userId: localStorage.getItem('userId'),
       filteredContacts: [],
       connection: null,
       currentContact: null,
       currentMessages: [],
-      isLoggedIn: false,
+      isLoggedIn: localStorage.getItem('userId') !== null
     }
   },
   created() {
-    const storedUserId = localStorage.getItem('userId');
-    if (storedUserId) {
-      this.userId = storedUserId;
-      this.isLoggedIn = true;
-      this.connectWs();
-    }
   },
   methods: {
     sendMessage: function (message) {
