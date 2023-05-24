@@ -76,7 +76,7 @@ export default defineComponent({
 
       this.connection.onmessage = (event) => {
         console.log(event)
-        if (event.type === 'chat') {
+        if (event.data.type === 'chat') {
           console.log("received chat message")
           this.contactsKey += 1;
         }
