@@ -91,13 +91,13 @@ export default defineComponent({
 
 <template>
   <div class="w-screen h-screen flex justify-center content-center items-center" >
-    <div class="h-[80vh] w-[80vh] " id="login-form-container"  hidden>
+    <div class="h-[80vh] w-[80vh] " id="login-form-container"  >
       <LoginForm @login="login" @register="register"></LoginForm>
     </div>
-    <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts">
+    <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
       <Contacts @select-chat="selectChat" :key="contactsKey" :userId="userId"></Contacts>
     </div>
-    <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" >
+    <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
       <Chat  :receiver="this.currentContact" :connection="this.connection" :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
     </div>
   </div>
