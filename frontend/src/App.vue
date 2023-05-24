@@ -98,6 +98,11 @@ export default defineComponent({
         console.log(event)
         console.log("Successfully connected to the echo websocket server...")
       }
+      this.connection.onclose = function (event) {
+        console.log(event)
+        console.log("Connection closed")
+        setTimeout(this.connectWs, 200);
+      }
     }
   }
 })
