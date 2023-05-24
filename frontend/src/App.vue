@@ -127,7 +127,7 @@ export default defineComponent({
       <LoginForm @login="login" @register="register"></LoginForm>
     </div>
     <div v-if="isLoggedIn" class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
-      <Contacts v-if="isLoggedIn" @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
+      <Contacts @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
     </div>
     <div v-if="isLoggedIn" class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
       <Chat  :receiver="this.currentContact" :current-messages="this.currentMessages" :connection="this.connection"
