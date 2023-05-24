@@ -85,7 +85,7 @@ export default defineComponent({
           console.log(this.currentContact)
           console.log(new_chat.sender)
           if (this.currentContact === new_chat.sender) {
-            this.currentMessages.unshift(JSON.parse(event.data))
+            this.currentMessages.unshift(new_chat)
           }
         }
 
