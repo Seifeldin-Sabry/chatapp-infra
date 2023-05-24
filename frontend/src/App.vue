@@ -84,6 +84,10 @@ export default defineComponent({
       this.connection.onmessage = (event) => {
         console.log(event)
         console.log(event.data)
+        if(event.data === 'pong'){
+          console.log("pong")
+          return
+        }
         let new_chat=JSON.parse(event.data)
         if (new_chat.type === 'chat') {
           console.log("received chat message")
