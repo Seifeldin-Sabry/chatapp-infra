@@ -27,6 +27,9 @@ export default defineComponent({
     }
   },
   created() {
+    if (this.isLoggedIn) {
+      this.connectWs()
+    }
   },
   methods: {
     sendMessage: function (message) {
@@ -120,15 +123,15 @@ export default defineComponent({
     <div class="h-[80vh] w-[80vh]" v-if="!isLoggedIn" id="login-form-container">
       <LoginForm @login="login" @register="register"></LoginForm>
     </div>
-    <div v-if="isLoggedIn" class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
+    <div v-else-if="isLoggedIn" class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
       <Contacts @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
     </div>
-    <div v-if="isLoggedIn" class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
+    <div v-else-if="isLoggedIn" class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
       <Chat  :receiver="this.currentContact" :current-messages="this.currentMessages" :connection="this.connection"
             :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
     </div>
     <button class="border-2 hover:border-orange-600 hover:text-orange-600 border-slate-300 bg-black text-slate-300 rounded-lg py-3 font-semibold"
-            v-if="isLoggedIn" @click="logout" id="logout">Logout</button>
+            v-else-if="isLoggedIn" @click="logout" id="logout">Logout</button>
   </div>
 </template>
 
