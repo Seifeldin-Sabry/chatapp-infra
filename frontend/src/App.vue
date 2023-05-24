@@ -34,6 +34,7 @@ export default defineComponent({
     },
     selectChat(chats, name) {
       console.log("selecting chat")
+      this.currentMessages[0] = []
       chats.forEach((chat) => {
         if (chat.user2 === name || chat.user1 === name) {
           console.log("new chat id" + chat.id)
