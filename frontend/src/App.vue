@@ -27,10 +27,13 @@ export default defineComponent({
   },
   created() {
     this.userId = localStorage.getItem("userId");
+    console.log("created" + this.userId)
     if (this.userId) {
       document.getElementById("login-form-container").hidden = true;
+      console.log(document.getElementById("login-form-container"))
       document.getElementById("contacts").hidden = false;
       document.getElementById("chat").hidden = false;
+      console.log("logging in with userId" + this.userId)
       this.connectWs()
     }
   },
