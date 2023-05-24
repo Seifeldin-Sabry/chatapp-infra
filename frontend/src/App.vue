@@ -18,7 +18,6 @@ export default defineComponent({
   data() {
     return {
       contactsKey: 500,
-      isModalVisible: false,
       chatId: 0,
       userId: null,
       filteredContacts: [],
@@ -30,12 +29,6 @@ export default defineComponent({
   created() {
   },
   methods: {
-    showModal() {
-      this.isModalVisible = true;
-    },
-    closeModal() {
-      this.isModalVisible = false;
-    },
     sendMessage: function (message) {
       console.log(this.connection);
       this.connection.send(message);
@@ -89,27 +82,6 @@ export default defineComponent({
         console.log(event)
         console.log("Successfully connected to the echo websocket server...")
       }
-    },
-    addContact(name){
-      fetch("/api/chats", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user1: this.userId,
-          user2: name
-        })
-      }).then(response => response.json())
-          .then(data => {
-            console.log("response to post chat")
-            console.log(data)
-            this.contactsKey+=1
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
-
     }
   }
 })
@@ -123,10 +95,6 @@ export default defineComponent({
       <LoginForm @login="login" @register="register"></LoginForm>
     </div>
     <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
-      <div id="app">
-        <button  type="button" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded" @click="showModal">Add Contact!</button>
-        <Modal @add-contact="addContact" v-show="isModalVisible" @close="closeModal"/>
-      </div>
       <Contacts @select-chat="selectChat" :key="contactsKeyy" :userId="userId"></Contacts>
     </div>
     <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden >
