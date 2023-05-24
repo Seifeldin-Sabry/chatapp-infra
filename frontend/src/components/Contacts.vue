@@ -1,10 +1,11 @@
 <script>
 import Contact from "./Contact.vue";
 import SearchContact from "./SearchContact.vue";
+import Modal from "./Modal.vue";
 
 export default {
   props: ['userId'],
-  components: {Contact, SearchContact},
+  components: {Modal,Contact, SearchContact},
   data() {
     return {
       chats: null,
@@ -49,6 +50,7 @@ export default {
 
     },
     showModal() {
+      console.log("modal is true")
       this.isModalVisible = true;
     },
     closeModal() {
