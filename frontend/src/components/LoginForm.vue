@@ -27,8 +27,10 @@ export default {
             if (data.status === 'success') {
               if (this.loginRegister === 'login') {
                 this.$emit('login', data.data.user);
+                localStorage.setItem('userId', data.data.user.name);
               } else {
                 this.$emit('register', data.data.user[0]);
+                localStorage.setItem('userId', data.data.user[0].name);
               }
             }
           })

@@ -6,7 +6,6 @@ const {getUsers} = require("../controllers/userController");
 router.route('/:user/chats')
     .get(getChats)
 
-router.route('/:name/users')
-    .get(getUsers)
+router.route('/').get(getUsers)
 
 module.exports = router;

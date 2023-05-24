@@ -29,6 +29,12 @@ export default {
       console.log("filtering")
     },
     addContact(name) {
+      if (this.chats.some((chat) => {
+        return chat.user2 === name || chat.user1 === name
+      })) {
+        console.log("chat already exists")
+        return
+      }
       fetch("/api/chats", {
         method: 'POST',
         headers: {
@@ -60,8 +66,11 @@ export default {
     },
   },
   async created() {
-
-    console.log("using user id : " + this.userId)
+    console.log("created contacts")
+    if (this.userId === null) {
+      return
+    }
+    console.log("fetching chats")
     const response = await fetch(`/api/users/${this.userId}/chats`)
     const {data: chats} = await response.json()
     this.chats = chats.chats

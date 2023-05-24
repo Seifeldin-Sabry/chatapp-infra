@@ -16,10 +16,16 @@ exports.getChats = async (req, res, next) => {
     })
 }
 exports.getUsers = async (req, res, next) => {
-    const {name} = req.params
+    const {term} = req.query
+    if (!term) return res.status(200).json({
+        status: "success",
+        data: {
+            users: []
+        }
+    });
     const users = await sql `
         SELECT * from PLATFORM_USER
-        where name LIKE ${'%' +name + '%'}
+        where name LIKE ${'%' + term + '%'}
         ORDER BY name
         limit 5
         `
