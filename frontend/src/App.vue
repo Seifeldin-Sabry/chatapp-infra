@@ -123,14 +123,14 @@ export default defineComponent({
     <div class="h-[80vh] w-[80vh]" v-if="!isLoggedIn" id="login-form-container">
       <LoginForm @login="login" @register="register"></LoginForm>
     </div>
-    <div v-else class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts">
+    <div v-if="isLoggedIn" class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts">
       <Contacts @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
     </div>
-    <div v-else class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat">
+    <div v-if="isLoggedIn" class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat">
       <Chat  :receiver="this.currentContact" :current-messages="this.currentMessages" :connection="this.connection"
             :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
     </div>
-    <button v-else class="border-2 hover:border-orange-600 hover:text-orange-600 border-slate-300 bg-black text-slate-300 rounded-lg py-3 font-semibold"
+    <button v-if="isLoggedIn" class="border-2 hover:border-orange-600 hover:text-orange-600 border-slate-300 bg-black text-slate-300 rounded-lg py-3 font-semibold"
              @click="logout" id="logout">Logout</button>
     </div>
 </template>
