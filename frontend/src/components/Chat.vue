@@ -17,7 +17,7 @@ export default defineComponent({
 
       const response = await fetch(`/api/chats/${this.chatId}/messages`)
       const {data: messages} = await response.json()
-      this.currentMessages.push(messages.messages.reverse());
+      this.currentMessages=messages.messages.reverse();
     }
 
     console.log("created with id "+this.chatId)
