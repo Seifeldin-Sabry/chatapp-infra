@@ -58,9 +58,6 @@ export default defineComponent({
       this.isLoggedIn = true;
       localStorage.setItem('userId', this.userId);
       this.contactsKey += 1;
-      document.getElementById("login-form-container").hidden = true;
-      document.getElementById("contacts").hidden = false;
-      document.getElementById("chat").hidden = false;
       console.log("logging in with userId" + this.userId)
       this.connectWs()
     },
@@ -69,9 +66,6 @@ export default defineComponent({
       this.isLoggedIn = true;
       localStorage.setItem('userId', this.userId);
       this.contactsKey += 1;
-      document.getElementById("login-form-container").hidden = true;
-      document.getElementById("contacts").hidden = false;
-      document.getElementById("chat").hidden = false;
       console.log("registering with userId" + this.userId)
       this.connectWs()
 
