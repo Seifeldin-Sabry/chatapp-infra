@@ -6,6 +6,7 @@ import {th} from '@faker-js/faker';
 import {defineComponent} from "vue";
 import LoginForm from "./components/LoginForm.vue";
 import SearchContact from "./components/SearchContact.vue";
+import {emitter} from "./main.js";
 
 export default defineComponent({
   computed: {
@@ -77,7 +78,7 @@ export default defineComponent({
       this.connection.onmessage = (event) => {
         if(event.data.type==='chat'){
           console.log("received chat message")
-          this.emmiter.$emit('new-chat',event.data)
+          this.contactsKey+=1;
         }else if(this.currentContact===event.data.sender){
           this.currentMessages.unshift(JSON.parse(event.data))
         }
