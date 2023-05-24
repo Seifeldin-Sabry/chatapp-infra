@@ -67,7 +67,7 @@ function get_instance_ip() {
   echo "Getting VM IP"
   VM_IP=$(gcloud compute instances describe "$VM_NAME" --format="get(networkInterfaces[0].accessConfigs[0].natIP)" 2>/dev/null)
   export IP_ADDRESS=$VM_IP
-  python3 ./dnsSetup.py
+  python3 ./script/dnsSetup.py
   echo "VM IP is $VM_IP"
 }
 
