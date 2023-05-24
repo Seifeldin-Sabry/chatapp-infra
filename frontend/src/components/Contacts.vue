@@ -29,6 +29,12 @@ export default {
       console.log("filtering")
     },
     addContact(name) {
+      if (this.chats.some((chat) => {
+        return chat.user2 === name || chat.user1 === name
+      })) {
+        console.log("chat already exists")
+        return
+      }
       fetch("/api/chats", {
         method: 'POST',
         headers: {
