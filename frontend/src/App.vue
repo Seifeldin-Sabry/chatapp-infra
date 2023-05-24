@@ -22,7 +22,7 @@ export default defineComponent({
       filteredContacts: [],
       connection: null,
       currentContact: null,
-      currentMessages:[]
+      currentMessages: []
     }
   },
   created() {
@@ -38,7 +38,7 @@ export default defineComponent({
         if (chat.user2 === name || chat.user1 === name) {
           console.log("new chat id" + chat.id)
           this.chatId = chat.id;
-          this.currentContact=name;
+          this.currentContact = name;
         }
 
       })
@@ -46,7 +46,7 @@ export default defineComponent({
     login(user) {
 
       this.userId = user.name;
-      this.contactsKey+=1;
+      this.contactsKey += 1;
       document.getElementById("login-form-container").hidden = true;
       document.getElementById("contacts").hidden = false;
       document.getElementById("chat").hidden = false;
@@ -55,7 +55,7 @@ export default defineComponent({
     },
     register(user) {
       this.userId = user.name;
-      this.contactsKey+=1;
+      this.contactsKey += 1;
       document.getElementById("login-form-container").hidden = true;
       document.getElementById("contacts").hidden = false;
       document.getElementById("chat").hidden = false;
@@ -70,17 +70,20 @@ export default defineComponent({
       console.log(this.filteredContacts)
       console.log("filtering")
     },
-    connectWs(){
+    connectWs() {
       console.log("Starting connection to WebSocket Server")
       this.connection = new WebSocket("ws:" + window.location.host + "/socket?userId=" + this.userId)
 
       this.connection.onmessage = (event) => {
         console.log(event.data)
-        if(event.data.type==='chat'){
+        if (event.data.type === 'chat') {
           console.log("received chat message")
-          this.contactsKey+=1;
-        }else if(this.currentContact===event.data.sender){
-          this.currentMessages.unshift(JSON.parse(event.data))
+          this.contactsKey += 1;
+        }
+        if (event.data().chatId !== null) {
+          if (this.currentContact === event.data.sender) {
+            this.currentMessages.unshift(JSON.parse(event.data))
+          }
         }
 
       }
@@ -98,15 +101,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="w-screen h-screen flex justify-center content-center items-center" >
-    <div class="h-[80vh] w-[80vh] " id="login-form-container"  >
+  <div class="w-screen h-screen flex justify-center content-center items-center">
+    <div class="h-[80vh] w-[80vh] " id="login-form-container">
       <LoginForm @login="login" @register="register"></LoginForm>
     </div>
     <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
       <Contacts @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
     </div>
     <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
-      <Chat  :receiver="this.currentContact" :messages="currentMessages" :connection="this.connection" :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
+      <Chat :receiver="this.currentContact" :messages="currentMessages" :connection="this.connection"
+            :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
     </div>
   </div>
 </template>
