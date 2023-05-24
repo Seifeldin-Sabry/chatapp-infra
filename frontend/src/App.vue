@@ -82,6 +82,8 @@ export default defineComponent({
           console.log("received chat message")
           this.contactsKey += 1;
         }else {
+          console.log(this.currentContact)
+          console.log(new_chat.sender)
           if (this.currentContact === new_chat.sender) {
             this.currentMessages.unshift(JSON.parse(event.data))
           }
