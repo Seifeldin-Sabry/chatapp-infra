@@ -26,6 +26,13 @@ export default defineComponent({
     }
   },
   created() {
+    this.userId = localStorage.getItem("userId");
+    if (this.userId) {
+      document.getElementById("login-form-container").hidden = true;
+      document.getElementById("contacts").hidden = false;
+      document.getElementById("chat").hidden = false;
+      this.connectWs()
+    }
   },
   methods: {
     sendMessage: function (message) {
@@ -44,8 +51,8 @@ export default defineComponent({
       })
     },
     login(user) {
-
       this.userId = user.name;
+      localStorage.setItem("userId", this.userId);
       this.contactsKey += 1;
       document.getElementById("login-form-container").hidden = true;
       document.getElementById("contacts").hidden = false;
@@ -55,6 +62,7 @@ export default defineComponent({
     },
     register(user) {
       this.userId = user.name;
+      localStorage.setItem("userId", this.userId);
       this.contactsKey += 1;
       document.getElementById("login-form-container").hidden = true;
       document.getElementById("contacts").hidden = false;
