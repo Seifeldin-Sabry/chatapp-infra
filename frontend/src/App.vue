@@ -108,7 +108,7 @@ export default defineComponent({
       this.connection.onclose = function (event) {
         console.log(event)
         console.log("Connection closed")
-        setTimeout(this.connectWs, 200);
+        setTimeout(this.connectWs(), 200);
       }
     }
   }
