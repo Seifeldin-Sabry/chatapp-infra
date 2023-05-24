@@ -39,15 +39,20 @@ wsServer.on('connection', function (ws, req) {
                 if (client.readyState === 1) {
                     if (client.userId === jsonMsg.receiver) {
                         // get chat to add from server
-                        let chat = getChat(jsonMsg.sender, jsonMsg.receiver)
+                        let data =undefined;
+                        let chat =  getChat(jsonMsg.sender, jsonMsg.receiver)
+                            .then((result) => {
+                                console.log(result)
+                                data = result
+                            })
 
                         // (chat => {
                             console.log("here")
-                            console.log(chat)
+                            console.log(data)
                             chat.type = "chat";
                             // client.send(JSON.stringify(chat));
-                            console.log(chat);
-                            client.send(chat);
+                            console.log(data);
+                            client.send(data);
                         // });
                     }
                 }
