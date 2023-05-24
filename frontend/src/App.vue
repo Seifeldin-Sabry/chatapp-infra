@@ -30,9 +30,11 @@ export default defineComponent({
     if (storedUserId) {
       this.userId = storedUserId;
       this.connectWs();
-      document.getElementById("login-form-container").hidden = true;
-      document.getElementById("contacts").hidden = false;
-      document.getElementById("chat").hidden = false;
+      document.addEventListener('load', () => {
+        document.getElementById("login-form-container").hidden = true;
+        document.getElementById("contacts").hidden = false;
+        document.getElementById("chat").hidden = false;
+      })
     }
   },
   methods: {
