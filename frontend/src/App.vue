@@ -26,7 +26,14 @@ export default defineComponent({
     }
   },
   created() {
-    this.userId = localStorage.getItem("userId");
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      this.userId = storedUserId;
+      this.connectWs();
+      document.getElementById("login-form-container").hidden = true;
+      document.getElementById("contacts").hidden = false;
+      document.getElementById("chat").hidden = false;
+    }
   },
   methods: {
     sendMessage: function (message) {
@@ -44,6 +51,14 @@ export default defineComponent({
 
       })
     },
+    logout() {
+      localStorage.removeItem('userId');
+      this.userId = null;
+      document.getElementById("login-form-container").hidden = false;
+      document.getElementById("contacts").hidden = true;
+      document.getElementById("chat").hidden = true;
+    }
+    ,
     login(user) {
       this.userId = user.name;
       this.contactsKey += 1;
@@ -117,6 +132,8 @@ export default defineComponent({
       <Chat :receiver="this.currentContact" :current-messages="this.currentMessages" :connection="this.connection"
             :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
     </div>
+    <button class="border-2 hover:border-orange-600 hover:text-orange-600 border-slate-300 bg-black text-slate-300 rounded-lg py-3 font-semibold"
+            v-if="userId!=null" @click="logout" id="logout">Logout</button>
   </div>
 </template>
 
