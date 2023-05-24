@@ -42,7 +42,7 @@ export default {
           .then(data => {
             console.log("response to post chat")
             console.log(data)
-            this.chats.push(data.chat)
+            this.chats.push(data)
             const messageData = {type:"newChat",receiver:name,sender: this.userId};
             this.connection.send(JSON.stringify(messageData))
           })
