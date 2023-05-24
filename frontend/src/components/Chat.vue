@@ -3,11 +3,10 @@ import TextBubble from "./TextBubble.vue";
 import {defineComponent} from "vue";
 
 export default defineComponent({
-  props: ['chatId', 'userId', 'connection','receiver','messages'],
+  props: ['chatId', 'userId', 'connection','receiver','currentMessages'],
   components: {TextBubble},
   data() {
     return {
-      messages: null,
       text: ''
     }
   },
@@ -18,7 +17,7 @@ export default defineComponent({
 
       const response = await fetch(`/api/chats/${this.chatId}/messages`)
       const {data: messages} = await response.json()
-      this.messages = messages.messages.reverse()
+      this.currentMessages.push(messages.messages.reverse());
     }
 
     console.log("created with id "+this.chatId)
@@ -44,7 +43,7 @@ export default defineComponent({
           })
         }).then(response => response.json())
             .then(data => {
-              this.messages.unshift(data.data.message[0])
+              this.currentMessages.unshift(data.data.message[0])
             })
             .catch((error) => {
               console.error('Error:', error);
@@ -61,8 +60,8 @@ export default defineComponent({
 <template>
   <div class="flex flex-col flex-grow w-full h-full bg-gray-700 shadow-xl rounded-lg">
     <div class="flex flex-col-reverse flex-grow h-0 p-4 overflow-auto no-scrollbar ">
-      <TextBubble v-for="(item, index) in messages" :key="index" :text="messages[index].message"
-                  :current-user="userId" :sender="messages[index].sender" :customProp="item"/>
+      <TextBubble v-for="(item, index) in currentMessages" :key="index" :text="currentMessages[index].message"
+                  :current-user="userId" :sender="currentMessages[index].sender" :customProp="item"/>
     </div>
     <div class="bg-orange-800 p-4">
       <input @keyup.enter="sendMessage" v-model="text"
