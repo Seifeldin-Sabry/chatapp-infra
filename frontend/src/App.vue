@@ -72,7 +72,7 @@ export default defineComponent({
     },
     connectWs() {
       console.log("Starting connection to WebSocket Server")
-      this.connection = new WebSocket("ws:" + window.location.host + "/socket?userId=" + this.userId)
+      this.connection = new WebSocket("wss:" + window.location.host + "/socket?userId=" + this.userId)
 
       this.connection.onmessage = (event) => {
         console.log(event)
