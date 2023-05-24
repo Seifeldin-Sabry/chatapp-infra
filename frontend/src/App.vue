@@ -85,7 +85,9 @@ export default defineComponent({
           console.log(this.currentContact)
           console.log(new_chat.sender)
           if (this.currentContact === new_chat.sender) {
+            console.log(this.currentMessages)
             this.currentMessages.unshift(new_chat)
+            console.log(this.currentMessages)
           }
         }
 
@@ -112,7 +114,7 @@ export default defineComponent({
       <Contacts @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
     </div>
     <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
-      <Chat :receiver="this.currentContact" :messages="currentMessages" :connection="this.connection"
+      <Chat :receiver="this.currentContact" :messages="this.currentMessages" :connection="this.connection"
             :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
     </div>
   </div>
