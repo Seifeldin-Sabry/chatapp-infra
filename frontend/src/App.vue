@@ -22,19 +22,16 @@ export default defineComponent({
       filteredContacts: [],
       connection: null,
       currentContact: null,
-      currentMessages: []
+      currentMessages: [],
+      isLoggedIn: localStorage.getItem('userId') !== null,
     }
   },
   created() {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       this.userId = storedUserId;
+      this.isLoggedIn = true;
       this.connectWs();
-      document.addEventListener('load', () => {
-        document.getElementById("login-form-container").hidden = true;
-        document.getElementById("contacts").hidden = false;
-        document.getElementById("chat").hidden = false;
-      })
     }
   },
   methods: {
@@ -53,16 +50,16 @@ export default defineComponent({
 
       })
     },
-    logout() {
-      localStorage.removeItem('userId');
-      this.userId = null;
-      document.getElementById("login-form-container").hidden = false;
-      document.getElementById("contacts").hidden = true;
-      document.getElementById("chat").hidden = true;
-    }
+      logout() {
+        localStorage.removeItem('userId');
+        this.userId = null;
+        this.isLoggedIn = false;
+      }
     ,
     login(user) {
       this.userId = user.name;
+      this.isLoggedIn = true;
+      localStorage.setItem('userId', this.userId);
       this.contactsKey += 1;
       document.getElementById("login-form-container").hidden = true;
       document.getElementById("contacts").hidden = false;
@@ -72,6 +69,8 @@ export default defineComponent({
     },
     register(user) {
       this.userId = user.name;
+      this.isLoggedIn = true;
+      localStorage.setItem('userId', this.userId);
       this.contactsKey += 1;
       document.getElementById("login-form-container").hidden = true;
       document.getElementById("contacts").hidden = false;
@@ -125,17 +124,17 @@ export default defineComponent({
 <template>
   <div class="w-screen h-screen flex justify-center content-center items-center">
     <div class="h-[80vh] w-[80vh] " id="login-form-container">
-      <LoginForm @login="login" @register="register"></LoginForm>
+      <LoginForm v-if="!isLoggedIn" @login="login" @register="register"></LoginForm>
     </div>
     <div class="h-[80vh] w-[20vh] border-2  border-orange-600" id="contacts" hidden>
-      <Contacts @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
+      <Contacts v-if="isLoggedIn" @select-chat="selectChat" :connection="this.connection" :key="contactsKey" :userId="userId"></Contacts>
     </div>
     <div class="h-[80vh] w-[70vh] border-2  border-orange-600" id="chat" hidden>
-      <Chat :receiver="this.currentContact" :current-messages="this.currentMessages" :connection="this.connection"
+      <Chat v-if="isLoggedIn" :receiver="this.currentContact" :current-messages="this.currentMessages" :connection="this.connection"
             :chat-id=this.chatId :user-id="userId" :key="chatId"></Chat>
     </div>
     <button class="border-2 hover:border-orange-600 hover:text-orange-600 border-slate-300 bg-black text-slate-300 rounded-lg py-3 font-semibold"
-            v-if="userId!=null" @click="logout" id="logout">Logout</button>
+            v-if="isLoggedIn" @click="logout" id="logout">Logout</button>
   </div>
 </template>
 
