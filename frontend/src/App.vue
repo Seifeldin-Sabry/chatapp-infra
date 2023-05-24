@@ -23,7 +23,7 @@ export default defineComponent({
       connection: null,
       currentContact: null,
       currentMessages: [],
-      isLoggedIn: localStorage.getItem('userId') !== null,
+      isLoggedIn: false,
     }
   },
   created() {
