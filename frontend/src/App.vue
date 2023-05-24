@@ -86,7 +86,7 @@ export default defineComponent({
           console.log(new_chat.sender)
           if (this.currentContact === new_chat.sender) {
             console.log(this.currentMessages)
-            this.currentMessages.unshift(new_chat)
+            this.currentMessages[0].unshift(new_chat)
             console.log(this.currentMessages)
           }
         }
