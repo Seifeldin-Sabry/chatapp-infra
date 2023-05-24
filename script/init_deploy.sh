@@ -36,7 +36,7 @@ function create_vm() {
       ufw enable
       git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
       git config --global --add safe.directory /chatapp-infra
-      gsutil cp gs://chatapp-infra/public /chatapp-infra/frontend/public -r
+      gsutil cp -r gs://chatapp-infra/public /chatapp-infra/frontend/public
       cp /chatapp-infra/script/systemd_backend.service /etc/systemd/system/chatapp-backend.service
       cp /chatapp-infra/script/systemd_frontend.service /etc/systemd/system/chatapp-frontend.service
       cp /chatapp-infra/script/nginx_config /etc/nginx/sites-available/default
