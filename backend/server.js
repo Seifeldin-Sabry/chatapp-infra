@@ -43,7 +43,7 @@ wsServer.on('connection', function (ws, req) {
                             console.log("here")
                             chat[0].type = "chat";
                             console.log(chat[0]);
-                            client.send(chat[0]);
+                            client.send(chat[0].toString());
                         });
                     }
                 }
