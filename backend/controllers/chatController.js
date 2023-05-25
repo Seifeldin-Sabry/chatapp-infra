@@ -5,9 +5,8 @@ exports.getMessages = async (req, res, next) => {
 
     const messages = await sql`
         select *
-        from message m
-        join chat c on m.chat_id = c.chat.id
-        where c.chat_id = ${id}`
+        from message
+        where chat_id = ${id}`
 
     res.status(200).json({
         status: "success",
@@ -45,23 +44,6 @@ exports.createChat = async (req, res, next) => {
             chat
         }
     })
-}
-
-exports.deleteChat = async (req, res, next) => {
-    const {id} = req.params
-    const chat = await sql`
-        delete from chat
-        where id = ${id}`
-
-    if (chat.count === 0) {
-        return res.status(404).json({
-            status: "fail",
-            message: "No chat found with that ID"
-        })
-    }
-    res.status(204).json({
-        status: "success"
-    });
 }
 
 exports.addMessage = async (req, res, next) => {

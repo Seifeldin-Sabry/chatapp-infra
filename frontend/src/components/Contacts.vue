@@ -64,21 +64,21 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    async deleteChat(chatId) {
-      console.log("deleting chat")
-      console.log(chatId)
-      const response = await fetch(`/api/chats/${chatId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      })
-      if (response.status === 204) {
-        this.chats = this.chats.filter((chat) => {
-          return chat.id !== chatId
-        })
-      }
-    }
+    // async deleteChat(chatId) {
+    //   console.log("deleting chat")
+    //   console.log(chatId)
+    //   const response = await fetch(`/api/chats/${chatId}`, {
+    //     method: 'DELETE',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //   })
+    //   if (response.status === 204) {
+    //     this.chats = this.chats.filter((chat) => {
+    //       return chat.id !== chatId
+    //     })
+    //   }
+    // }
   },
   async created() {
     console.log("created contacts")
