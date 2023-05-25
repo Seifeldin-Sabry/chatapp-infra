@@ -20,7 +20,7 @@ gcloud compute ssh $vm_name --project $project_id --zone $vm_zone --command "cd 
 if [ "$1" == "db" ]; then
   internal_ip=$(gcloud compute instances describe $vm_name --project $project_id --zone $vm_zone --format="get(networkInterfaces[0].networkIP)")
   echo "Internal IP is $internal_ip"
-  gcloud compute ssh $vm_name --project $project_id --zone $vm_zone --command "echo $SQL_ROOT_PASSWORD | sudo -S -h $internal_ip -d $DB_NAME -u postgres psql -f /chatapp-infra/sql/schema.sql"
+  gcloud compute ssh $vm_name --project $project_id --zone $vm_zone --command "echo $SQL_ROOT_PASSWORD | sudo psql -h $internal_ip -d $DB_NAME -U postgres -f /chatapp-infra/sql/schema.sql"
 fi
 
 
