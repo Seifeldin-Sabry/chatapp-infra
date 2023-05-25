@@ -64,6 +64,21 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
+    async deleteChat(chatId) {
+      console.log("deleting chat")
+      console.log(chatId)
+      const response = await fetch(`/api/chats/${chatId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      if (response.status === 204) {
+        this.chats = this.chats.filter((chat) => {
+          return chat.id !== chatId
+        })
+      }
+    }
   },
   async created() {
     console.log("created contacts")
@@ -100,7 +115,7 @@ export default {
     </button>
     <Modal @add-contact="addContact" v-show="isModalVisible" @close="closeModal"/>
     <SearchContact @filter="filterContacts"></SearchContact>
-    <contact @select-chat="selectChat" v-for="(item, index) in chats" :key="index"
+    <contact @delete-chat="deleteChat" @select-chat="selectChat" v-for="(item, index) in chats" :key="index"
              :name="(chats[index].user2===userId)?chats[index].user1:chats[index].user2" :customProp="item"/>
   </div>
 </template>

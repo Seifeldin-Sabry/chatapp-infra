@@ -1,7 +1,7 @@
 <script>
 
 export default {
-    props: ['name'],
+    props: ['name', 'chatId'],
     data() {
         return {
             messages: null,
@@ -45,6 +45,7 @@ export default {
 
 </svg>
         <span class="pr-2">{{ name }}</span>
+      <button @click.stop="$emit('deleteChat', chatId)" class="border-2 hover:border-red-600 hover:text-red-600 border-slate-300 bg-black text-slate-300 rounded-lg py-1 px-2 font-semibold">Delete</button>
     </div>
 </template>
 

@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { getMessages, addMessage, createChat } = require('../controllers/chatController');
+const { getMessages, addMessage, createChat, deleteChat } = require('../controllers/chatController');
 
 router.route('/:id/messages')
-    .get(getMessages)
     .post(addMessage)
+
+router.route('/:id')
+    .get(getMessages)
+    .delete(deleteChat)
+
 
 router.route('/')
     .post(createChat)

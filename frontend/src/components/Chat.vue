@@ -16,7 +16,7 @@ export default defineComponent({
     if (this.chatId !== 0) {
       this.currentMessages.length=0;
 
-      const response = await fetch(`/api/chats/${this.chatId}/messages`)
+      const response = await fetch(`/api/chats/${this.chatId}`)
       const {data: messages} = await response.json()
       console.log(messages.messages)
       console.log("current messages")
