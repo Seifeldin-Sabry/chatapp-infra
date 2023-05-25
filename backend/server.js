@@ -20,6 +20,11 @@ const {getChat} = require("./controllers/chatController");
 
 const wsServer = new ws.Server({server});
 wsServer.on('connection', function (ws, req) {
+    let interval = setInterval(function(){ws.ping()}, 50e3)
+    ws.on("close", function(ev) {
+        clearInterval(interval);
+        console.log('disconnected SOCKET, reason: ' + ev.code);
+    });
     const parameters = parse(req.url, true);
     ws.userId = parameters.query.userId;
 

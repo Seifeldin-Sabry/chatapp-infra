@@ -80,7 +80,6 @@ export default defineComponent({
     connectWs() {
       console.log("Starting connection to WebSocket Server")
       this.connection = new WebSocket("wss:" + window.location.host + "/socket?userId=" + this.userId)
-      let keepAliveIntervalId;
       this.connection.onmessage = (event) => {
         console.log(event)
         console.log(event.data)
@@ -103,14 +102,6 @@ export default defineComponent({
         }
 
       }
-      // this.connection.on
-      keepAliveIntervalId = setInterval(() => {
-        if (this.connection.readyState === WebSocket.OPEN) {
-          this.connection.send('ping');
-          console.log("ping")
-        }
-      }, 2000);
-
       this.connection.onopen = function (event) {
         console.log(event)
         console.log("Successfully connected to the echo websocket server...")
@@ -118,8 +109,6 @@ export default defineComponent({
       this.connection.onclose = function (event) {
         console.log(event)
         console.log("Connection closed")
-        clearInterval(keepAliveIntervalId);
-
       }
     }
   }
