@@ -67,7 +67,7 @@ export default defineComponent({
       <TextBubble v-for="(item, index) in currentMessages[0]" :key="index" :text="currentMessages[0][index].message"
                   :current-user="userId" :sender="currentMessages[0][index].sender" :customProp="item"/>
     </div>
-    <div class="bg-orange-800 p-4">
+    <div v-if="chatId!==0" class="bg-orange-800 p-4">
       <input @keyup.enter="sendMessage" v-model="text"
              class="flex items-center h-10 w-full bg-orange-300 text-right rounded px-3 text-sm" type="text"
              placeholder="Type your message…">
