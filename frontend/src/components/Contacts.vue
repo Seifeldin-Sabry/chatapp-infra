@@ -116,7 +116,8 @@ export default {
     <Modal @add-contact="addContact" v-show="isModalVisible" @close="closeModal"/>
     <SearchContact @filter="filterContacts"></SearchContact>
     <contact @delete-chat="deleteChat" @select-chat="selectChat" v-for="(item, index) in chats" :key="index"
-             :name="(chats[index].user2===userId)?chats[index].user1:chats[index].user2" :customProp="item"/>
+             :name="(chats[index].user2===userId)?chats[index].user1:chats[index].user2" :chat-id="chats[index].id" :customProp="item"/>
+
   </div>
 </template>
 
