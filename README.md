@@ -1,5 +1,8 @@
 ### Deploying a Full Stack Chat Application
 
+For the full code navigate to the [chatapp-infra](https://github.com/Seifeldin-Sabry/chatapp-infra) repo
+
+
 ###### This project is a chat application that allows users to communicate with each other in real time using websockets.
 ##### Deployed using Gcloud Compute Engine and Cloud SQL. with VPC network peering between the two services to allow for private communication between the SQL instance and the Compute Engine instance.
 ##### Tech Stack:
@@ -222,6 +225,5 @@ gcloud compute ssh $vm_name --project $project_id --zone $vm_zone --command "cd 
 gcloud compute ssh $vm_name --project $project_id --zone $vm_zone --command "sudo systemctl start $frontend_service"
 gcloud compute ssh $vm_name --project $project_id --zone $vm_zone --command "sudo systemctl start $backend_service"
 ```
-
 
 By [Mocanu Paul-Cristian](https://github.com/MocanuPaulC), [Seifeldin Sabry](https://github.com/Seifeldin-Sabry), [Nikola Velikov](https://github.com/Nixxion57)
