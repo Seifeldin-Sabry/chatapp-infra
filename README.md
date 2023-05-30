@@ -12,7 +12,11 @@ For the full code navigate to the [chatapp-infra](https://github.com/Seifeldin-S
 4. Socket.io
 5. TailwindCSS
 
-You can log in, register and find others to chat with all with database operations.
+These actions trigger db operations:
+- Logging In
+- Registering
+- Sending a message
+- Adding a friend
 <br>
 
 ##### How to Deploy:
@@ -179,7 +183,29 @@ setup_database
 
 ```
 
+This DNS_Script is run to update the DNS record to point to the new VM instance
+```python
+#!/usr/bin/env python3
+# Description: This script is used to get the DNS records from OVH API
+import ovh
+import os
 
+IP = os.getenv('IP_ADDRESS')
+
+# Instanciate an OVH Client.
+client = ovh.Client(
+    endpoint='ovh-eu',  # Endpoint of API OVH Europe (List of available endpoints)
+    application_key='cd5b04ffc8157cbf',  # Application Key
+    application_secret='6e079cd046add6c3b1fa8a0ff656c2cb',  # Application Secret
+    consumer_key='d575fa8443a3f420a2dc27144f769646',  # Consumer Key
+)
+
+result = client.get("/domain/zone/mocanupaulc.com/record", fieldType='A')
+client.put('/domain/zone/mocanupaulc.com/record/{}'.format(result[0]), target=IP,ttl=60)
+client.put('/domain/zone/mocanupaulc.com/record/{}'.format(result[1]), target=IP,ttl=60,subDomain='www')
+refresh=client.post('/domain/zone/mocanupaulc.com/refresh')
+
+```
 
 
 ###### Updating the app:
