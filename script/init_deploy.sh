@@ -24,7 +24,7 @@ function create_vm() {
       --tags="$TARGET_TAGS" \
       --image-family="$IMAGE_FAMILY" \
       --image-project="$IMAGE_PROJECT" \
-      --metadata startup-script=./script/startup.sh
+      --metadata=startup-script=gs://$BUCKET_NAME/startup.sh
 }
 
 function authorize_vm_to_instance() {
@@ -114,8 +114,13 @@ function check_vpc_network_exists() {
   fi
 }
 
+function copy_startup_script_to_bucket() {
+  gsutil cp ./script/startup.sh gs://"$BUCKET_NAME"/startup.sh
+}
+
 check_vpc_network_exists
 check_bucket_exists
+copy_startup_script_to_bucket
 create_vm
 get_instance_ip
 create_sql_instance
