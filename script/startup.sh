@@ -1,7 +1,7 @@
 #!/bin/bash
 
 EMAIL="seifeldin.sabry@student.kdg.be"
-DOMAINS=mocanupaulc.com,www.mocanupaulc.com
+DOMAINS="mocanupaulc.com,www.mocanupaulc.com"
 
 apt update && sudo apt upgrade -y
 sudo curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
