@@ -12,6 +12,8 @@ DATABASE_NAME="chatapp"
 SQL_ROOT_PASSWORD="chatapp"
 VPC_NAME="chatapp-vpc"
 BUCKET_NAME="chatapp-infra"
+EMAIL="seifeldin.sabry@student.kdg.be"
+DOMAINS="mocanupaulc.com,www.mocanupaulc.com"
 
 function create_vm() {
   if gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
@@ -24,7 +26,7 @@ function create_vm() {
       --tags="$TARGET_TAGS" \
       --image-family="$IMAGE_FAMILY" \
       --image-project="$IMAGE_PROJECT" \
-      --metadata=startup-script=gs://$BUCKET_NAME/startup.sh
+      --metadata=startup-script-url=gs://$BUCKET_NAME/startup.sh
 }
 
 function authorize_vm_to_instance() {
