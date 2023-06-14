@@ -33,8 +33,6 @@ These actions trigger db operations:
 5. It also recursively copies the public assets from the bucket to the frontend folder since we dont track a public folder in git
 6. And then a python script is run to make sure the DNS records are updated with the external ip of the VM instance so we should be able to [whatsapp](http://mocanupaulc.com) now
 ```shell
-#!/bin/bash
-
 VM_NAME="chatapp-vm"
 REGION="europe-west1"
 ZONE="europe-west1-b"
@@ -61,29 +59,7 @@ function create_vm() {
       --tags="$TARGET_TAGS" \
       --image-family="$IMAGE_FAMILY" \
       --image-project="$IMAGE_PROJECT" \
-      --metadata=startup-script="#!/bin/bash
-      apt update && sudo apt upgrade -y
-      sudo curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
-      sudo apt-get install -y nodejs
-      apt-get install -y vite postgresql postgresql-contrib git nginx certbot python3-certbot-nginx
-      service postgresql start
-      ufw allow 80
-      ufw allow 443
-      ufw allow 22
-      nginx -t
-      ufw enable
-      git clone https://github.com/Seifeldin-Sabry/chatapp-infra.git /chatapp-infra
-      git config --global --add safe.directory /chatapp-infra
-      gsutil cp -r gs://chatapp-infra/public /chatapp-infra/frontend/public
-      cp /chatapp-infra/script/systemd_backend.service /etc/systemd/system/chatapp-backend.service
-      cp /chatapp-infra/script/systemd_frontend.service /etc/systemd/system/chatapp-frontend.service
-      cp /chatapp-infra/script/nginx_config /etc/nginx/sites-available/default
-      systemctl daemon-reload
-      systemctl restart nginx
-      certbot --nginx --non-interactive -m $EMAIL --agree-tos --domains=$DOMAINS
-      systemctl start chatapp-backend.service
-      systemctl start chatapp-frontend.service
-      "
+      --metadata=startup-script-url=gs://$BUCKET_NAME/startup.sh
 }
 
 function authorize_vm_to_instance() {
@@ -165,7 +141,7 @@ function check_bucket_exists() {
 }
 
 function check_vpc_network_exists() {
-  if gcloud compute networks describe "$VPC_NAME" --project="$GOOGLE_PROJECT_ID" --quiet 1>/dev/null 2>/dev/null; then
+  if gcloud compute networks describe "$VPC_NAME" --quiet 1>/dev/null 2>/dev/null; then
     echo "VPC ${VPC_NAME} exists"
   else
     echo "VPC ${VPC_NAME} does not exist, please create it first"
@@ -173,14 +149,18 @@ function check_vpc_network_exists() {
   fi
 }
 
+function copy_startup_script_to_bucket() {
+  gsutil cp ./script/startup.sh gs://"$BUCKET_NAME"/startup.sh
+}
+
 check_vpc_network_exists
 check_bucket_exists
+copy_startup_script_to_bucket
 create_vm
 get_instance_ip
 create_sql_instance
 authorize_vm_to_instance
 setup_database
-
 ```
 
 This DNS_Script is run to update the DNS record to point to the new VM instance
